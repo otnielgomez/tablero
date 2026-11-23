@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Casa">
+<title>Tablero Casa</title>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;700;800&family=Red+Hat+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Tablero para iPad Air 2 (iOS 15, 1024x768 horizontal).
+   Ligero: sin librerías, CSS simple compatible con Safari 15. */
+:root{--bg:#07102b;--card:rgba(20,40,95,.55);--line:rgba(120,170,255,.16);--ink:#eaf1ff;--dim:#8fa6d6;--acc:#4fc1ff;--up:#3ddc97;--down:#ff6b6b;--warn:#f7e463}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);-webkit-user-select:none;user-select:none}
+body{font:15px/1.35 "Red Hat Text",-apple-system,Helvetica,sans-serif;
+  background:radial-gradient(120% 90% at 85% 10%,#1a3fd0 0%,rgba(26,63,208,0) 55%),radial-gradient(90% 80% at 0% 100%,#0d2a78 0%,rgba(13,42,120,0) 60%),var(--bg);
+  padding:max(14px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+.grid{height:100%;display:grid;grid-template-columns:1.05fr 1fr;grid-template-rows:auto 1fr auto;gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 16px;overflow:hidden;position:relative}
+h2{font:600 12px "Red Hat Text",sans-serif;color:var(--acc);letter-spacing:.02em;margin-bottom:8px}
+.num{font-family:"Red Hat Display",sans-serif;font-weight:800}
+.muted{color:var(--dim)}
+/* Encabezado */
+.top{grid-column:1/3;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:4px 6px}
+.clock{font-size:76px;line-height:1;letter-spacing:-.02em}
+.date{font-size:18px;margin-top:4px}
+.now{display:flex;align-items:center;gap:14px}
+.now svg{width:78px;height:78px}
+.temp{font-size:58px;line-height:1}
+.temp small{font-size:24px;color:var(--dim)}
+.facts{display:grid;grid-template-columns:auto auto;gap:3px 16px;font-size:14px}
+.facts b{font-weight:600}
+.aqi{text-align:center;padding:10px 14px;border-radius:16px;border:1px solid var(--line);background:var(--card);min-width:112px}
+.aqi .num{font-size:34px;line-height:1.05}
+/* Pronóstico */
+.days{display:flex;gap:8px;margin-bottom:10px}
+.day{flex:1;text-align:center;padding:10px 4px;border-radius:12px;background:rgba(255,255,255,.04)}
+.day svg{width:34px;height:34px;display:block;margin:2px auto}
+.day .rain{font-size:12px;color:var(--acc)}
+.fc{display:flex;flex-direction:column}
+.hours{display:flex;align-items:flex-end;gap:4px;flex:1;min-height:90px;padding-top:6px;border-top:1px solid var(--line)}
+.h{flex:1;text-align:center;font-size:11px;color:var(--dim);display:flex;flex-direction:column;justify-content:flex-end;height:100%}
+.h i{display:block;border-radius:5px 5px 2px 2px;background:linear-gradient(#4fc1ff,#3b4fd8);margin:3px 14px}
+.h span{color:var(--ink);font-size:12px}
+/* Tráfico */
+.traffic{padding:0}
+.traffic h2{position:absolute;top:10px;left:14px;z-index:2;background:rgba(7,16,43,.8);padding:4px 10px;border-radius:10px;margin:0}
+.traffic iframe{border:0;width:100%;height:100%;display:block}
+/* Mercados y noticias */
+.bottom{grid-column:1/3;display:grid;grid-template-columns:1fr 1.6fr;gap:12px}
+.mk{display:flex;gap:10px}
+.m{flex:1}
+.m .num{font-size:24px;line-height:1.1;white-space:nowrap}
+.m .ch{font-size:13px;font-weight:600}
+.up{color:var(--up)}.down{color:var(--down)}
+.news{height:86px;overflow:hidden}
+.news p{font-size:17px;font-weight:500;line-height:1.3;transition:opacity .6s}
+.news .src{font-size:12px;margin-top:6px}
+.home{font-size:12px;color:var(--dim);margin-top:6px}
+/* Trayectos */
+.trip{position:absolute;left:10px;right:10px;bottom:10px;z-index:3;background:rgba(7,16,43,.92);border:1px solid var(--line);border-radius:14px;padding:10px 14px;display:none}
+.trip .row{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.trip .big{font-size:30px;line-height:1.1}
+.trip .st{font-size:13px;font-weight:600}
+.trip + .trip{bottom:auto}
+.ok{color:var(--up)}.mid{color:var(--warn)}.bad{color:var(--down)}
+/* Ajustes */
+.cfg{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(3,8,22,.96);z-index:20;display:none;padding:30px 40px;overflow:auto}
+.cfg h3{font:700 24px "Red Hat Display",sans-serif;margin-bottom:14px}
+.cfg label{display:block;color:var(--dim);font-size:13px;margin:12px 0 4px}
+.cfg input,.cfg textarea{width:100%;font:16px "Red Hat Text",sans-serif;color:var(--ink);background:#0d1d4a;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.cfg textarea{height:90px;font-size:13px}
+.cfg button{font:600 16px "Red Hat Text",sans-serif;color:#07102b;background:var(--acc);border:0;border-radius:12px;padding:12px 18px;margin:16px 10px 0 0;min-height:44px}
+.cfg button.sec{background:#22345f;color:var(--ink)}
+.cfg .note{font-size:13px;color:var(--dim);margin-top:10px}
+.dim{position:fixed;top:0;left:0;right:0;bottom:0;background:#000;opacity:0;pointer-events:none;transition:opacity 2s}
+.err{color:var(--warn);font-size:12px}
+</style>
+</head>
+<body>
+<div class="grid">
+  <header class="top">
+    <div>
+      <div class="clock num" id="clock">--:--</div>
+      <div class="date" id="date"></div>
+    </div>
+    <div class="now">
+      <div id="nowIcon"></div>
+      <div>
+        <div class="temp num" id="nowTemp">--<small>°C</small></div>
+        <div class="muted" id="nowDesc">Cargando clima…</div>
+      </div>
+      <div class="facts" id="nowFacts"></div>
+    </div>
+    <div class="aqi" id="aqi"><div class="muted" style="font-size:12px">Calidad del aire</div><div class="num">--</div><div class="muted" style="font-size:12px">—</div></div>
+  </header>
+
+  <section class="card fc">
+    <h2 id="cityTitle">Pronóstico</h2>
+    <div class="days" id="days"></div>
+    <div class="hours" id="hours"></div>
+  </section>
+
+  <section class="card traffic">
+    <h2>Tráfico ahora</h2>
+    <iframe id="waze" title="Mapa de tráfico" loading="lazy"></iframe>
+    <div id="trips"></div>
+  </section>
+
+  <div class="bottom">
+    <section class="card">
+      <h2>Mercados</h2>
+      <div class="mk">
+        <div class="m"><div class="muted">Dólar</div><div class="num" id="usd">--</div><div class="ch muted" id="usdc">MXN</div></div>
+        <div class="m"><div class="muted">Bitcoin</div><div class="num" id="btc">--</div><div class="ch" id="btcc"></div></div>
+      </div>
+    </section>
+    <section class="card">
+      <h2>Noticias</h2>
+      <div class="news"><p id="headline">Cargando noticias…</p><div class="src muted" id="hsrc"></div></div>
+    </section>
+  </div>
+</div>
+<div class="dim" id="dim"></div>
+<div class="cfg" id="cfg">
+  <h3>Ajustes de este iPad</h3>
+  <div class="note">Estos datos se guardan solo en este iPad (en la dirección de la página), nunca en GitHub.</div>
+  <label for="cKey">Llave de TomTom</label>
+  <input id="cKey" autocomplete="off" autocapitalize="off" spellcheck="false">
+  <label for="cHome">Ubicación de casa (latitud, longitud)</label>
+  <input id="cHome" inputmode="decimal" placeholder="25.70, -100.30">
+  <button class="sec" id="cGeo" type="button">Usar la ubicación de este iPad</button>
+  <label for="cRoutes">Rutas (no editar si no es necesario)</label>
+  <textarea id="cRoutes" spellcheck="false"></textarea>
+  <div>
+    <button id="cSave" type="button">Guardar</button>
+    <button class="sec" id="cTest" type="button">Probar rutas ahora</button>
+    <button class="sec" id="cClose" type="button">Cerrar</button>
+  </div>
+  <div class="note" id="cMsg"></div>
+</div>
+
+<script>
+{
+/* ===== CONFIGURACIÓN: cambia aquí ===== */
+var CFG = {
+  ciudad: "Monterrey",
+  lat: 25.6866, lon: -100.3161,
+  tz: "America/Monterrey",
+  noticiasRSS: "https://news.google.com/rss?hl=es-419&gl=MX&ceid=MX:es-419",
+  wazeZoom: 12,
+  modoNoche: { desde: 23, hasta: 6, brillo: 0.55 }  // oscurece la pantalla de noche
+};
+
+var $ = function (id) { return document.getElementById(id); };
+var DIAS = ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"];
+
+/* --- Iconos de clima (SVG inline, sin descargas) --- */
+function icon(code, day) {
+  var sun = '<circle cx="32" cy="30" r="11" fill="#f7e463"/><g stroke="#f7e463" stroke-width="3" stroke-linecap="round"><path d="M32 9v5M32 46v5M11 30h5M48 30h5M17 15l4 4M43 41l4 4M17 45l4-4M43 19l4-4"/></g>';
+  var moon = '<path d="M38 12a17 17 0 1 0 14 24A14 14 0 0 1 38 12z" fill="#cfe0ff"/>';
+  var cloud = '<path d="M20 48h26a10 10 0 0 0 0-20 13 13 0 0 0-25-2A11 11 0 0 0 20 48z" fill="#dbe7ff"/>';
+  var drops = '<g stroke="#4fc1ff" stroke-width="3" stroke-linecap="round"><path d="M24 53l-2 6M33 53l-2 6M42 53l-2 6"/></g>';
+  var bolt = '<path d="M34 46l-6 10h6l-3 8 10-12h-6l3-6z" fill="#f7e463"/>';
+  var c = code, s;
+  if (c === 0) s = day ? sun : moon;
+  else if (c <= 2) s = '<g transform="translate(-8,-6) scale(.8)">' + (day ? sun : moon) + '</g>' + cloud;
+  else if (c === 3 || c === 45 || c === 48) s = cloud;
+  else if (c >= 95) s = cloud + bolt;
+  else s = cloud + drops;
+  return '<svg viewBox="0 0 64 64" aria-hidden="true">' + s + '</svg>';
+}
+function desc(c) {
+  if (c === 0) return "Despejado"; if (c === 1) return "Mayormente despejado"; if (c === 2) return "Parcialmente nublado";
+  if (c === 3) return "Nublado"; if (c === 45 || c === 48) return "Niebla";
+  if (c >= 51 && c <= 57) return "Llovizna"; if (c >= 61 && c <= 67) return "Lluvia"; if (c >= 71 && c <= 77) return "Nieve";
+  if (c >= 80 && c <= 82) return "Chubascos"; if (c >= 95) return "Tormenta"; return "—";
+}
+function hhmm(iso) { return iso ? iso.slice(11, 16) : "--"; }
+function fmt(n, d) { return Number(n).toLocaleString("es-MX", { minimumFractionDigits: d, maximumFractionDigits: d }); }
+function getJSON(url) { return fetch(url, { cache: "no-store" }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }); }
+
+/* --- Reloj y modo noche --- */
+function tick() {
+  var d = new Date();
+  $("clock").textContent = d.toLocaleTimeString("es-MX", { hour: "2-digit", minute: "2-digit", hour12: false });
+  var ds = d.toLocaleDateString("es-MX", { weekday: "long", day: "numeric", month: "long" });
+  $("date").textContent = ds.charAt(0).toUpperCase() + ds.slice(1);
+  var h = d.getHours(), n = CFG.modoNoche;
+  var noche = n.desde > n.hasta ? (h >= n.desde || h < n.hasta) : (h >= n.desde && h < n.hasta);
+  $("dim").style.opacity = noche ? n.brillo : 0;
+}
+
+/* --- Clima (Open-Meteo, gratis y sin llave) --- */
+function clima() {
+  var u = "https://api.open-meteo.com/v1/forecast?latitude=" + CFG.lat + "&longitude=" + CFG.lon +
+    "&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,is_day" +
+    "&hourly=temperature_2m,precipitation_probability&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,uv_index_max" +
+    "&timezone=" + encodeURIComponent(CFG.tz) + "&forecast_days=5";
+  getJSON(u).then(function (w) {
+    var c = w.current, dd = w.daily;
+    $("nowIcon").innerHTML = icon(c.weather_code, c.is_day);
+    $("nowTemp").innerHTML = Math.round(c.temperature_2m) + "<small>°C</small>";
+    $("nowDesc").textContent = desc(c.weather_code) + " · se siente " + Math.round(c.apparent_temperature) + "°";
+    $("nowFacts").innerHTML =
+      '<span class="muted">Humedad</span><b>' + c.relative_humidity_2m + '%</b>' +
+      '<span class="muted">Viento</span><b>' + Math.round(c.wind_speed_10m) + ' km/h</b>' +
+      '<span class="muted">Sol</span><b>' + hhmm(dd.sunrise[0]) + '–' + hhmm(dd.sunset[0]) + '</b>' +
+      '<span class="muted">UV máx</span><b>' + Math.round(dd.uv_index_max[0]) + '</b>';
+    $("days").innerHTML = dd.time.map(function (t, i) {
+      var dt = new Date(t + "T12:00:00");
+      return '<div class="day"><div class="muted">' + (i === 0 ? "hoy" : DIAS[dt.getDay()]) + '</div>' + icon(dd.weather_code[i], 1) +
+        '<div><b>' + Math.round(dd.temperature_2m_max[i]) + '°</b> <span class="muted">' + Math.round(dd.temperature_2m_min[i]) + '°</span></div>' +
+        '<div class="rain">' + (dd.precipitation_probability_max[i] || 0) + '% lluvia</div></div>';
+    }).join("");
+    // próximas 12 horas, cada 2 h
+    var now = Date.now(), H = w.hourly, idx = [];
+    for (var i = 0; i < H.time.length && idx.length < 12; i++) if (new Date(H.time[i]).getTime() >= now - 3600e3) idx.push(i);
+    idx = idx.filter(function (_, k) { return k % 2 === 0; });
+    var ts = idx.map(function (i) { return H.temperature_2m[i]; });
+    var lo = Math.min.apply(null, ts) - 2, hi = Math.max.apply(null, ts);
+    $("hours").innerHTML = idx.map(function (i) {
+      var t = H.temperature_2m[i], pct = 18 + 82 * (t - lo) / Math.max(1, hi - lo);
+      return '<div class="h"><span>' + Math.round(t) + '°</span><i style="height:' + (pct * 0.7) + '%"></i>' + H.time[i].slice(11, 13) + 'h</div>';
+    }).join("");
+  }).catch(function () { $("nowDesc").innerHTML = '<span class="err">Sin datos de clima</span>'; });
+}
+
+/* --- Calidad del aire (Open-Meteo) --- */
+function aire() {
+  var u = "https://air-quality-api.open-meteo.com/v1/air-quality?latitude=" + CFG.lat + "&longitude=" + CFG.lon + "&current=us_aqi,pm2_5&timezone=" + encodeURIComponent(CFG.tz);
+  getJSON(u).then(function (a) {
+    var v = Math.round(a.current.us_aqi), t, col;
+    if (v <= 50) { t = "Buena"; col = "#3ddc97"; } else if (v <= 100) { t = "Aceptable"; col = "#f7e463"; }
+    else if (v <= 150) { t = "Mala (sensibles)"; col = "#ffa94d"; } else if (v <= 200) { t = "Mala"; col = "#ff6b6b"; } else { t = "Muy mala"; col = "#c77dff"; }
+    $("aqi").innerHTML = '<div class="muted" style="font-size:12px">Calidad del aire</div><div class="num" style="color:' + col + '">' + v + '</div><div style="font-size:12px;color:' + col + '">' + t + '</div>';
+  }).catch(function () {});
+}
+
+/* --- Mercados --- */
+function mercados() {
+  getJSON("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd,mxn&include_24hr_change=true").then(function (r) {
+    var b = r.bitcoin, ch = b.usd_24h_change;
+    $("btc").textContent = "$" + fmt(b.usd, 0);
+    $("btcc").className = "ch " + (ch >= 0 ? "up" : "down");
+    $("btcc").textContent = (ch >= 0 ? "▲ " : "▼ ") + fmt(Math.abs(ch), 1) + "% 24h · $" + fmt(b.mxn / 1e6, 2) + "M MXN";
+  }).catch(function () { $("btcc").innerHTML = '<span class="err">sin datos</span>'; });
+
+  getJSON("https://open.er-api.com/v6/latest/USD").then(function (r) {
+    var v = r.rates.MXN, prev = null;
+    try { prev = JSON.parse(localStorage.getItem("usdPrev") || "null"); } catch (e) {}
+    $("usd").textContent = "$" + fmt(v, 2);
+    var hoy = new Date().toDateString(), txt = "MXN por USD";
+    if (prev && prev.d !== hoy) {
+      var diff = v - prev.v;
+      txt = '<span class="' + (diff <= 0 ? "up" : "down") + '">' + (diff >= 0 ? "▲ " : "▼ ") + fmt(Math.abs(diff), 2) + '</span> <span class="muted">vs ayer</span>';
+    }
+    $("usdc").innerHTML = txt;
+    try { if (!prev || prev.d !== hoy) localStorage.setItem("usdPrev", JSON.stringify({ d: hoy, v: v })); } catch (e) {}
+  }).catch(function () { $("usdc").innerHTML = '<span class="err">sin datos</span>'; });
+}
+
+/* --- Noticias (Google Noticias México vía RSS) --- */
+var titulares = [], ti = 0;
+function noticias() {
+  var enc = encodeURIComponent(CFG.noticiasRSS);
+  getJSON("https://api.rss2json.com/v1/api.json?rss_url=" + enc).then(function (r) {
+    return r.items.map(function (x) { return x.title; });
+  }).catch(function () {
+    return fetch("https://api.allorigins.win/raw?url=" + enc).then(function (r) { return r.text(); }).then(function (xml) {
+      var d = new DOMParser().parseFromString(xml, "text/xml");
+      return Array.prototype.map.call(d.querySelectorAll("item > title"), function (n) { return n.textContent; });
+    });
+  }).then(function (list) {
+    if (list && list.length) { titulares = list.slice(0, 15); ti = 0; rotar(); }
+  }).catch(function () { $("headline").innerHTML = '<span class="err">No se pudieron cargar las noticias</span>'; });
+}
+function rotar() {
+  if (!titulares.length) return;
+  var t = titulares[ti % titulares.length], p = t.lastIndexOf(" - ");
+  var el = $("headline");
+  el.style.opacity = 0;
+  setTimeout(function () {
+    el.textContent = p > 0 ? t.slice(0, p) : t;
+    $("hsrc").textContent = (p > 0 ? t.slice(p + 3) + " · " : "") + ((ti % titulares.length) + 1) + "/" + titulares.length;
+    el.style.opacity = 1;
+  }, 600);
+  ti++;
+}
+
+/* --- Tráfico (mapa en vivo de Waze) --- */
+function trafico() {
+  $("waze").src = "https://embed.waze.com/iframe?zoom=" + CFG.wazeZoom + "&lat=" + CFG.lat + "&lon=" + CFG.lon + "&ct=livemap&t=" + Date.now();
+}
+
+/* --- Ajustes privados: viven en el #hash de la URL y en localStorage del iPad --- */
+var P = { k: "", h: "", r: [] };
+function leerCfg() {
+  try { var s = JSON.parse(localStorage.getItem("cfgPriv") || "null"); if (s) P = s; } catch (e) {}
+  var hs = location.hash.replace(/^#/, "");
+  if (hs) hs.split("&").forEach(function (kv) {
+    var i = kv.indexOf("="); if (i < 0) return;
+    var k = kv.slice(0, i), v = decodeURIComponent(kv.slice(i + 1));
+    if (k === "k") P.k = v; else if (k === "h") P.h = v;
+    else if (k === "r") { try { P.r = JSON.parse(v); } catch (e) {} }
+  });
+}
+function guardarCfg() {
+  try { localStorage.setItem("cfgPriv", JSON.stringify(P)); } catch (e) {}
+  var hs = "k=" + encodeURIComponent(P.k) + "&h=" + encodeURIComponent(P.h) + "&r=" + encodeURIComponent(JSON.stringify(P.r));
+  try { history.replaceState(null, "", location.pathname + "#" + hs); } catch (e) { location.hash = hs; }
+}
+function abrirCfg() {
+  $("cKey").value = P.k; $("cHome").value = P.h; $("cRoutes").value = JSON.stringify(P.r); $("cMsg").textContent = "";
+  $("cfg").style.display = "block";
+}
+(function () {
+  var t = null, el = $("clock");
+  function start() { t = setTimeout(abrirCfg, 2500); }
+  function stop() { clearTimeout(t); }
+  el.addEventListener("touchstart", start); el.addEventListener("touchend", stop); el.addEventListener("touchmove", stop);
+  el.addEventListener("mousedown", start); el.addEventListener("mouseup", stop);
+  $("cClose").addEventListener("click", function () { $("cfg").style.display = "none"; });
+  $("cGeo").addEventListener("click", function () {
+    if (!navigator.geolocation) { $("cMsg").textContent = "Este navegador no permite ubicación."; return; }
+    $("cMsg").textContent = "Buscando ubicación…";
+    navigator.geolocation.getCurrentPosition(function (p) {
+      $("cHome").value = p.coords.latitude.toFixed(5) + ", " + p.coords.longitude.toFixed(5);
+      $("cMsg").textContent = "Listo. Ahora toca Guardar.";
+    }, function () { $("cMsg").textContent = "No se pudo obtener la ubicación. Escríbela a mano."; }, { enableHighAccuracy: true, timeout: 15000 });
+  });
+  $("cSave").addEventListener("click", function () {
+    P.k = $("cKey").value.trim(); P.h = $("cHome").value.replace(/\s/g, "");
+    try { P.r = JSON.parse($("cRoutes").value || "[]"); } catch (e) { $("cMsg").textContent = "Las rutas no tienen un formato válido."; return; }
+    guardarCfg(); $("cMsg").textContent = "Guardado. Si vas a agregar el tablero a la pantalla de inicio, hazlo ahora desde Safari.";
+    rutas();
+  });
+  $("cTest").addEventListener("click", function () { $("cfg").style.display = "none"; rutas(true); });
+})();
+
+/* --- Trayectos frecuentes con tráfico (TomTom) --- */
+function hm(d) { return d.toLocaleTimeString("es-MX", { hour: "numeric", minute: "2-digit", hour12: true }).replace(/\s?a\.?\s?m\.?/i, " am").replace(/\s?p\.?\s?m\.?/i, " pm"); }
+function rutaHoy(r, ahora, forzar) {
+  var p = r.t.split(":"), obj = new Date(ahora); obj.setHours(+p[0], +p[1], 0, 0);
+  if (forzar) return obj < ahora ? new Date(obj.getTime() + 864e5) : obj;
+  if (r.d.indexOf(ahora.getDay()) < 0) return null;
+  var antes = (r.a || 120) * 60e3, despues = (r.b || 15) * 60e3;
+  return (ahora >= obj - antes && ahora <= obj.getTime() + despues) ? obj : null;
+}
+var probando = 0;
+function rutas(forzar) {
+  if (forzar) probando = Date.now();
+  if (probando && Date.now() - probando > 10 * 60e3) probando = 0;
+  var box = $("trips"), ahora = new Date();
+  var activas = (P.r || []).map(function (r) { return { r: r, obj: rutaHoy(r, ahora, !!probando) }; }).filter(function (x) { return x.obj; });
+  if (!activas.length) { box.innerHTML = ""; return; }
+  if (!P.k || !P.h) { box.innerHTML = '<div class="trip" style="display:block"><span class="err">Falta la llave de TomTom o la ubicación de casa. Mantén presionado el reloj para abrir Ajustes.</span></div>'; return; }
+  Promise.all(activas.map(function (x) {
+    var r = x.r, u = "https://api.tomtom.com/routing/1/calculateRoute/" + P.h + ":" + r.lat + "," + r.lon +
+      "/json?key=" + encodeURIComponent(P.k) + "&traffic=true&travelMode=car&routeType=fastest&computeTravelTimeFor=all";
+    return getJSON(u).then(function (j) { x.s = j.routes[0].summary; return x; }).catch(function () { x.err = 1; return x; });
+  })).then(function (list) {
+    box.innerHTML = list.map(function (x, i) {
+      var r = x.r, pos = i ? "bottom:auto;top:" + (52 + (i - 1) * 110) + "px;" : "";
+      var head = '<div class="muted" style="font-size:12px">' + (r.q ? r.q + " · " : "") + (r.m === "llegada" ? "llegar a las " : "salida ") + hm(x.obj) + '</div>';
+      if (x.err) return '<div class="trip" style="display:block;' + pos + '">' + head + '<b>' + r.n + '</b> <span class="err">sin datos de tráfico</span></div>';
+      var s = x.s, min = Math.round(s.travelTimeInSeconds / 60), km = (s.lengthInMeters / 1000).toFixed(1);
+      var libre = s.noTrafficTravelTimeInSeconds || s.travelTimeInSeconds, retraso = Math.max(0, s.travelTimeInSeconds - libre) / libre;
+      var trafico = retraso < .15 ? '<span class="ok">tráfico fluido</span>' : retraso < .4 ? '<span class="mid">tráfico moderado</span>' : '<span class="bad">tráfico pesado</span>';
+      var extra;
+      if (r.m === "llegada") {
+        var salir = new Date(x.obj.getTime() - s.travelTimeInSeconds * 1000), faltan = Math.round((salir - Date.now()) / 60e3);
+        var cls = faltan > 15 ? "ok" : faltan > 5 ? "mid" : "bad";
+        extra = '<span class="st ' + cls + '">' + (faltan > 0 ? "Salir a las " + hm(salir) + " (en " + faltan + " min)" : "¡Salgan ya!") + '</span>';
+      } else {
+        var llega = new Date(Math.max(Date.now(), x.obj.getTime()) + s.travelTimeInSeconds * 1000);
+        extra = '<span class="st muted">saliendo ' + (Date.now() > x.obj ? "ahora" : "a las " + hm(x.obj)) + ' llega ~' + hm(llega) + '</span>';
+      }
+      return '<div class="trip" style="display:block;' + pos + '">' + head +
+        '<div class="row"><b style="font-size:17px">' + r.n + '</b><span class="big num">' + min + ' min</span></div>' +
+        '<div class="row"><span class="st">' + trafico + ' <span class="muted">· ' + km + ' km</span></span>' + extra + '</div></div>';
+    }).join("");
+  });
+}
+
+/* --- Arranque y actualizaciones --- */
+leerCfg();
+$("cityTitle").textContent = "Pronóstico · " + CFG.ciudad;
+tick(); clima(); aire(); mercados(); noticias(); trafico();
+setInterval(tick, 10e3);
+setInterval(clima, 15 * 60e3);
+setInterval(aire, 30 * 60e3);
+setInterval(mercados, 5 * 60e3);
+setInterval(noticias, 30 * 60e3);
+setInterval(rotar, 12e3);
+setInterval(trafico, 15 * 60e3);
+rutas(); setInterval(rutas, 5 * 60e3);
+setTimeout(function () { location.reload(); }, 6 * 3600e3); // recarga cada 6 h para liberar memoria del iPad
+}
+</script>
+</body>
+</html>
