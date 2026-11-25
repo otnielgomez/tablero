@@ -274,6 +274,13 @@ h2{font:600 12px "Red Hat Text",sans-serif;color:var(--acc);letter-spacing:.02em
 /* Deslizar para recargar */
 .ptr{position:fixed;top:0;left:50%;z-index:30;transform:translate(-50%,-60px);background:#13234f;border:1px solid var(--line);color:var(--ink);font:600 14px "Red Hat Text",sans-serif;padding:8px 16px;border-radius:20px;box-shadow:0 6px 20px rgba(0,0,0,.4);transition:transform .15s}
 .ptr.listo{background:var(--acc);color:#07102b}
+/* Conexión con Home Assistant */
+.login{position:fixed;top:0;left:0;right:0;bottom:0;z-index:25;background:rgba(3,8,22,.96);display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:30px}
+.login h3{font:800 30px "Red Hat Display",sans-serif}
+.login p{color:var(--dim);max-width:520px}
+.login button{font:700 20px "Red Hat Text",sans-serif;color:#07102b;background:var(--acc);border:0;border-radius:16px;padding:0 30px;min-height:64px}
+.login button:focus{outline:4px solid #fff}
+.login .sec2{background:#22345f;color:var(--ink);font-size:16px;min-height:48px}
 /* Casa (Home Assistant) */
 .withroom .hours{flex:none;height:70px;min-height:0;margin-bottom:6px}
 .withroom .dev{min-height:54px;padding:7px 10px}
@@ -470,6 +477,7 @@ h2{font:600 12px "Red Hat Text",sans-serif;color:var(--acc);letter-spacing:.02em
   <nav class="nav"><button type="button" class="act" data-v="main">Inicio</button><button type="button" data-v="geely">Geely</button><button type="button" data-v="tv">TV</button><button type="button" data-v="fam">Familia</button><button type="button" data-v="ag">Agenda</button><button type="button" data-v="mus">Música</button><button type="button" data-v="red">Red</button><button type="button" class="door-btn" id="doorBtn">🔔 Puerta</button></nav>
 </div>
 <div class="ss" id="ss"><img id="ssA" alt=""><img id="ssB" alt=""><div class="ssi"><div class="h" id="ssH"></div><div class="d" id="ssD"></div></div><div class="ssb" id="ssB2"></div><div class="ssm" id="ssM"></div></div>
+<div class="login" id="login"><h3>Conectar con Home Assistant</h3><p>Inicia sesión una vez con tu usuario de Home Assistant (administrador). El tablero recordará la sesión y tomará la configuración guardada.</p><button type="button" id="loginBtn">Iniciar sesión</button><button type="button" class="sec2" id="loginLater">Ahora no</button><p class="err" id="loginErr"></p></div>
 <div class="ptr" id="ptr">↓ Desliza para recargar</div>
 <div class="lav" id="lav"></div>
 <div class="dim" id="dim"></div>
@@ -495,7 +503,9 @@ h2{font:600 12px "Red Hat Text",sans-serif;color:var(--acc);letter-spacing:.02em
   <button class="sec" id="cGeo" type="button">Usar la ubicación de este iPad</button>
   <label for="cHa">Home Assistant: dirección (vacío = la misma de esta página)</label>
   <input id="cHa" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="http://homeassistant.local:8123">
-  <label for="cTok">Home Assistant: token de acceso de larga duración</label>
+  <div class="note" id="cSesion"></div>
+  <div><button class="sec" type="button" id="cLogin">Conectar con mi sesión de Home Assistant</button><button class="sec" type="button" id="cLogout">Cerrar sesión</button></div>
+  <label for="cTok">Home Assistant: token de larga duración (opcional si usas tu sesión)</label>
   <input id="cTok" autocomplete="off" autocapitalize="off" spellcheck="false">
   <label for="cArea">Área a mostrar</label>
   <input id="cArea" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="sala">
@@ -740,11 +750,14 @@ function valoresBase() { if (!P.cfe) P.cfe = "2026-11-21"; if (!(P.e > 0)) P.e =
 function guardarCfg() {
   try { localStorage.setItem("cfgPriv", JSON.stringify(P)); } catch (e) {}
   var hs = "k=" + encodeURIComponent(P.k) + "&h=" + encodeURIComponent(P.h) + "&r=" + encodeURIComponent(JSON.stringify(P.r)) +
-    "&u=" + encodeURIComponent(P.u || "") + "&t=" + encodeURIComponent(P.t || "") + "&a=" + encodeURIComponent(P.a || "sala") + "&g=" + encodeURIComponent(P.g || "") + "&e=" + P.e + "&p=" + P.p + "&cfe=" + encodeURIComponent(P.cfe || "") + "&alb=" + encodeURIComponent(JSON.stringify(P.alb || []));
+    "&u=" + encodeURIComponent(P.u || "") + (AUTH.refresh ? "" : "&t=" + encodeURIComponent(P.t || "")) + "&a=" + encodeURIComponent(P.a || "sala") + "&g=" + encodeURIComponent(P.g || "") + "&e=" + P.e + "&p=" + P.p + "&cfe=" + encodeURIComponent(P.cfe || "") + "&alb=" + encodeURIComponent(JSON.stringify(P.alb || []));
   try { history.replaceState(null, "", location.pathname + "#" + hs); } catch (e) { location.hash = hs; }
+  subirCfg();
 }
 function abrirCfg() {
-  $("cKey").value = P.k; $("cHome").value = P.h; $("cHa").value = P.u || ""; $("cTok").value = P.t || ""; $("cArea").value = P.a || "sala"; $("cGeely").value = P.g || ""; $("cKwh").value = P.e; $("cGas").value = P.p; $("cCfe").value = P.cfe || ""; pintarAlbumes(); $("cDump").textContent = ""; $("cRoutes").value = JSON.stringify(P.r); $("cMsg").textContent = "";
+  $("cKey").value = P.k; $("cHome").value = P.h; $("cHa").value = P.u || ""; $("cTok").value = AUTH.refresh ? "" : (P.t || ""); $("cTok").placeholder = AUTH.refresh ? "Usando tu sesión de Home Assistant" : "";
+  $("cSesion").innerHTML = AUTH.refresh ? '<span class="up">✓ Conectado con tu sesión de Home Assistant. La configuración se comparte con tus otras pantallas.</span>' : "Usando token manual. Conecta tu sesión para compartir la configuración entre pantallas.";
+  $("cLogout").style.display = AUTH.refresh ? "" : "none"; $("cArea").value = P.a || "sala"; $("cGeely").value = P.g || ""; $("cKwh").value = P.e; $("cGas").value = P.p; $("cCfe").value = P.cfe || ""; pintarAlbumes(); $("cDump").textContent = ""; $("cRoutes").value = JSON.stringify(P.r); $("cMsg").textContent = "";
   $("cfg").style.display = "block";
 }
 (function () {
@@ -764,9 +777,9 @@ function abrirCfg() {
   });
   $("cSave").addEventListener("click", function () {
     P.k = $("cKey").value.trim(); P.h = $("cHome").value.replace(/\s/g, "");
-    P.u = $("cHa").value.trim().replace(/\/$/, ""); P.t = $("cTok").value.trim(); P.a = $("cArea").value.trim() || "sala"; P.g = $("cGeely").value.trim(); P.e = parseFloat($("cKwh").value) || 4.69; P.p = parseFloat($("cGas").value) || 29.99; if ($("cCfe").value) P.cfe = $("cCfe").value;
+    P.u = $("cHa").value.trim().replace(/\/$/, ""); if (!AUTH.refresh || $("cTok").value.trim()) P.t = $("cTok").value.trim(); P.a = $("cArea").value.trim() || "sala"; P.g = $("cGeely").value.trim(); P.e = parseFloat($("cKwh").value) || 4.69; P.p = parseFloat($("cGas").value) || 29.99; if ($("cCfe").value) P.cfe = $("cCfe").value;
     try { P.r = JSON.parse($("cRoutes").value || "[]"); } catch (e) { $("cMsg").textContent = "Las rutas no tienen un formato válido."; return; }
-    guardarCfg(); $("cMsg").textContent = "Guardado. Si vas a agregar el tablero a la pantalla de inicio, hazlo ahora desde Safari.";
+    guardarCfg(); $("cMsg").textContent = AUTH.refresh ? "Guardado en esta pantalla y en Home Assistant." : "Guardado en esta pantalla.";
     rutas(); casa(); geely(); frecuentes();
   });
   $("cSens").addEventListener("click", function () {
@@ -829,12 +842,15 @@ function rutas(forzar) {
 /* --- Casa: Home Assistant (API REST con token) --- */
 var DOM = ["light", "switch", "fan", "cover", "media_player", "climate", "input_boolean"];
 function haBase() { return P.u || (location.port === "8123" || location.pathname.indexOf("/local/") === 0 ? location.origin : ""); }
-function ha(path, body) {
+function ha(path, body, reintento) {
   return fetch(haBase() + path, {
     method: body ? "POST" : "GET", cache: "no-store",
     headers: { "Authorization": "Bearer " + P.t, "Content-Type": "application/json" },
     body: body ? JSON.stringify(body) : undefined
-  }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.headers.get("content-type").indexOf("json") >= 0 ? r.json() : r.text(); });
+  }).then(function (r) {
+    if (r.status === 401 && AUTH.refresh && !reintento) return refrescar().then(function () { return ha(path, body, true); });
+    if (!r.ok) throw new Error(r.status); return r.headers.get("content-type").indexOf("json") >= 0 ? r.json() : r.text();
+  });
 }
 function devIcon(d, on) {
   var c = on ? "#f7e463" : "#8fa6d6";
@@ -1915,8 +1931,100 @@ function frecuentes() {
   })).then(function (S) { box.innerHTML = L.map(function (r, i) { return tarjeta(r, S[i]); }).join(""); });
 }
 
+/* --- Sesión de Home Assistant (OAuth propio del tablero) y configuración compartida --- */
+var AUTH = { access: null, refresh: null, exp: 0, cid: null };
+function authBase() { return P.u || location.origin; }
+function authCid() { return authBase() + "/"; }
+function authRedirect() { return location.origin + location.pathname; }
+function authGuardar() { try { localStorage.setItem("tabAuth", JSON.stringify(AUTH)); } catch (e) {} }
+function tokenPost(datos) {
+  var b = Object.keys(datos).map(function (k) { return k + "=" + encodeURIComponent(datos[k]); }).join("&");
+  return fetch(authBase() + "/auth/token", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: b })
+    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); });
+}
+function aplicarToken(j) {
+  AUTH.access = j.access_token; AUTH.exp = Date.now() + (j.expires_in || 1800) * 1000;
+  if (j.refresh_token) AUTH.refresh = j.refresh_token;
+  AUTH.cid = authCid(); P.t = AUTH.access; authGuardar();
+}
+var refrescando = null;
+function refrescar() {
+  if (!AUTH.refresh) return Promise.reject(new Error("sin sesión"));
+  if (refrescando) return refrescando;
+  refrescando = tokenPost({ grant_type: "refresh_token", refresh_token: AUTH.refresh, client_id: AUTH.cid || authCid() })
+    .then(aplicarToken)
+    .catch(function (e) { if (e.message === "400" || e.message === "401" || e.message === "403") { AUTH = { access: null, refresh: null, exp: 0, cid: null }; authGuardar(); pedirLogin(); } throw e; })
+    .then(function (x) { refrescando = null; return x; }, function (e) { refrescando = null; throw e; });
+  return refrescando;
+}
+function iniciarLogin() {
+  var st = Math.random().toString(36).slice(2);
+  try { sessionStorage.setItem("authState", st); localStorage.setItem("authState", st); } catch (e) {}
+  location.href = authBase() + "/auth/authorize?response_type=code&client_id=" + encodeURIComponent(authCid()) + "&redirect_uri=" + encodeURIComponent(authRedirect()) + "&state=" + st;
+}
+function pedirLogin() { $("login").style.display = "flex"; setTimeout(function () { $("loginBtn").focus(); }, 50); }
+function authInit() {
+  try { var g = JSON.parse(localStorage.getItem("tabAuth") || "null"); if (g && g.refresh) AUTH = g; } catch (e) {}
+  var q = location.search.match(/[?&]code=([^&]+)/);
+  if (q) {                                              // regreso del inicio de sesión
+    var code = decodeURIComponent(q[1]);
+    return tokenPost({ grant_type: "authorization_code", code: code, client_id: authCid() }).then(function (j) {
+      aplicarToken(j); location.replace(location.pathname + location.hash);
+    }).catch(function (e) { $("loginErr").textContent = "No se pudo iniciar sesión (" + e.message + "). Intenta de nuevo."; pedirLogin(); });
+  }
+  if (AUTH.refresh) {
+    P.t = AUTH.access;
+    if (Date.now() > AUTH.exp - 120e3) return refrescar().catch(function () {});
+    return Promise.resolve();
+  }
+  if (!P.t) pedirLogin();
+  return Promise.resolve();
+}
+setInterval(function () { if (AUTH.refresh && Date.now() > AUTH.exp - 5 * 60e3) refrescar().catch(function () {}); }, 60e3);
+$("loginBtn").addEventListener("click", iniciarLogin);
+$("loginLater").addEventListener("click", function () { $("login").style.display = "none"; });
+$("cLogin").addEventListener("click", iniciarLogin);
+$("cLogout").addEventListener("click", function () {
+  if (!window.confirm("¿Cerrar la sesión de Home Assistant en esta pantalla?")) return;
+  if (AUTH.refresh) tokenPost({ token: AUTH.refresh, action: "revoke" }).catch(function () {});
+  AUTH = { access: null, refresh: null, exp: 0, cid: null }; authGuardar(); P.t = ""; guardarCfg(); location.reload();
+});
+/* Configuración compartida: se guarda en Home Assistant (datos de tu usuario), no en un archivo público */
+var COMPARTIR = ["k", "h", "r", "u", "a", "g", "e", "p", "cfe"];
+function wsHA(msg) {
+  return new Promise(function (ok, mal) {
+    var ws = new WebSocket(haBase().replace(/^http/, "ws") + "/api/websocket"), listo = false;
+    var to = setTimeout(function () { try { ws.close(); } catch (e) {} mal(new Error("tiempo")); }, 10000);
+    ws.onmessage = function (m) {
+      var d = JSON.parse(m.data);
+      if (d.type === "auth_required") ws.send(JSON.stringify({ type: "auth", access_token: P.t }));
+      else if (d.type === "auth_invalid") { clearTimeout(to); ws.close(); mal(new Error("401")); }
+      else if (d.type === "auth_ok") { msg.id = 1; ws.send(JSON.stringify(msg)); }
+      else if (d.type === "result" && d.id === 1) { clearTimeout(to); listo = true; ws.close(); d.success ? ok(d.result) : mal(new Error((d.error && d.error.message) || "error")); }
+    };
+    ws.onerror = function () { if (!listo) { clearTimeout(to); mal(new Error("conexión")); } };
+  });
+}
+var bajando = false;
+function subirCfg() {
+  if (!AUTH.refresh || bajando) return;
+  var v = {}; COMPARTIR.forEach(function (k) { if (P[k] !== undefined) v[k] = P[k]; });
+  wsHA({ type: "frontend/set_user_data", key: "tablero_cfg", value: v }).catch(function () {});
+}
+function bajarCfg() {
+  if (!AUTH.refresh) return Promise.resolve();
+  return wsHA({ type: "frontend/get_user_data", key: "tablero_cfg" }).then(function (r) {
+    var v = r && r.value;
+    if (v && typeof v === "object") {
+      bajando = true; COMPARTIR.forEach(function (k) { if (v[k] !== undefined && v[k] !== "") P[k] = v[k]; }); valoresBase(); guardarCfg(); bajando = false;
+      rutas(); casa(); geely(); frecuentes(); pendientes();
+    } else if (P.k || (P.r && P.r.length)) subirCfg();        // primera vez: sube lo que ya tenía esta pantalla
+  }).catch(function () {});
+}
+
 /* --- Arranque y actualizaciones --- */
 leerCfg(); valoresBase();
+authInit().then(bajarCfg);
 $("cityTitle").textContent = "Pronóstico · " + CFG.ciudad;
 tick(); clima(); aire(); mercados(); noticias(); trafico();
 setInterval(tick, 10e3);
