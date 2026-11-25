@@ -1,0 +1,42 @@
+# Aviso al iPhone cuando tocan el timbre Nest, con la foto de quien tocó.
+# IMPORTANTE: reemplaza  notify.mobile_app_TU_IPHONE  por el nombre real de tu iPhone
+# (Herramientas para desarrolladores -> Acciones -> escribe "notify.mobile_app").
+
+- id: puerta_timbre
+  alias: "Puerta: tocaron el timbre"
+  mode: single
+  max_exceeded: silent
+  triggers:
+    - trigger: event
+      event_type: nest_event
+      event_data:
+        type: doorbell_chime
+  actions:
+    - action: notify.mobile_app_TU_IPHONE
+      data:
+        title: "🔔 Tocaron el timbre"
+        message: "Alguien está en la puerta ({{ now().strftime('%H:%M') }})."
+        data:
+          image: "/api/nest/event_media/{{ trigger.event.data.device_id }}/{{ trigger.event.data.nest_event_id }}/thumbnail"
+          url: "/local/tablero/index.html"
+          push:
+            interruption-level: time-sensitive
+    - delay: "00:00:30"
+
+- id: puerta_persona
+  alias: "Puerta: persona detectada"
+  mode: single
+  max_exceeded: silent
+  triggers:
+    - trigger: event
+      event_type: nest_event
+      event_data:
+        type: camera_person
+  actions:
+    - action: notify.mobile_app_TU_IPHONE
+      data:
+        title: "🚶 Persona en la entrada"
+        message: "La cámara de la puerta detectó a alguien."
+        data:
+          image: "/api/nest/event_media/{{ trigger.event.data.device_id }}/{{ trigger.event.data.nest_event_id }}/thumbnail"
+    - delay: "00:05:00"

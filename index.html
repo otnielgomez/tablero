@@ -6,6 +6,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Casa">
+<link rel="apple-touch-icon" href="icono.png">
+<link rel="icon" type="image/png" href="icono.png">
 <title>Tablero Casa</title>
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;700;800&family=Red+Hat+Text:wght@400;500;600&display=swap" rel="stylesheet">
@@ -18,7 +20,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);-web
 body{font:15px/1.35 "Red Hat Text",-apple-system,Helvetica,sans-serif;
   background:radial-gradient(120% 90% at 85% 10%,#1a3fd0 0%,rgba(26,63,208,0) 55%),radial-gradient(90% 80% at 0% 100%,#0d2a78 0%,rgba(13,42,120,0) 60%),var(--bg);
   padding:max(14px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
-.grid{height:100%;display:grid;grid-template-columns:1.05fr 1fr;grid-template-rows:auto 1fr auto;gap:12px}
+.grid{height:100%;display:grid;grid-template-columns:1.05fr 1fr;grid-template-rows:auto 1fr auto auto;gap:12px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 16px;overflow:hidden;position:relative}
 h2{font:600 12px "Red Hat Text",sans-serif;color:var(--acc);letter-spacing:.02em;margin-bottom:8px}
 .num{font-family:"Red Hat Display",sans-serif;font-weight:800}
@@ -49,19 +51,273 @@ h2{font:600 12px "Red Hat Text",sans-serif;color:var(--acc);letter-spacing:.02em
 .traffic{padding:0}
 .traffic h2{position:absolute;top:10px;left:14px;z-index:2;background:rgba(7,16,43,.8);padding:4px 10px;border-radius:10px;margin:0}
 .traffic iframe{border:0;width:100%;height:100%;display:block}
+.mini{position:absolute;top:0;left:0;right:0;bottom:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.mini .mimg{position:absolute;left:50%;transform:translateX(-50%);background:url(geely360.webp) no-repeat;background-size:400% 600%}
+.mstat{position:absolute;top:10px;right:12px;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;max-width:75%;z-index:2}
+.mhint{position:absolute;left:0;right:0;bottom:94px;text-align:center;font-size:12px;color:var(--dim)}
+.fqs{position:absolute;left:10px;right:10px;bottom:10px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;z-index:2}
+.fq{display:block;text-decoration:none;color:var(--ink);background:rgba(7,16,43,.8);border:1px solid var(--line);border-radius:14px;padding:8px 10px;min-height:72px;-webkit-tap-highlight-color:transparent}
+.fq .fn{font-size:12px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fq .fm{font:800 24px "Red Hat Display",sans-serif;line-height:1.15}
+.fq .fm small{font-size:13px;font-weight:500;color:var(--dim)}
+.fq .ft{font-size:11px;font-weight:600}
 /* Mercados y noticias */
-.bottom{grid-column:1/3;display:grid;grid-template-columns:1fr 1.6fr;gap:12px}
-.mk{display:flex;gap:10px}
-.m{flex:1}
-.m .num{font-size:24px;line-height:1.1;white-space:nowrap}
-.m .ch{font-size:13px;font-weight:600}
+.bottom{grid-column:1/3;display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.25fr) minmax(0,1.2fr) minmax(0,.85fr);gap:12px}
+.rec{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px 10px}
+.ri{display:flex;align-items:center;gap:8px;background:none;border:0;color:var(--ink);text-align:left;padding:3px 0;font:inherit;width:100%;-webkit-tap-highlight-color:transparent}
+.ri .ic{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex:none;font-size:15px;background:rgba(255,255,255,.06)}
+.ri div{min-width:0;flex:1}
+.ri b{display:block;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ri small{display:block;font-size:11.5px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ri.hoy .ic{background:rgba(255,107,107,.25)}.ri.hoy small{color:var(--down);font-weight:700}
+.ri.pronto .ic{background:rgba(247,228,99,.22)}.ri.pronto small{color:var(--warn);font-weight:700}
+.ri.ok small{color:var(--up)}
+.sm h2{display:flex;justify-content:space-between;gap:8px}
+.sm h2 span{color:var(--dim);font-weight:500}
+.smfig{position:relative;height:74px}
+.smfig svg{position:absolute;top:0;left:0;width:100%;height:100%}
+.smrow{display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-top:2px;white-space:nowrap;gap:6px}
+.smrow b{font-weight:700}
+.moon{display:flex;align-items:center;justify-content:center;gap:6px;font-size:12px;color:var(--dim);margin-top:3px}
+.moon svg{width:16px;height:16px}
+.mk{display:flex;flex-direction:column;gap:10px}
+.m{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:8px;align-items:baseline}
+.m .muted{font-size:13px;grid-column:1/3}
+.m .num{font-size:20px;line-height:1.1;white-space:nowrap}
+.m .ch{font-size:12px;font-weight:600;white-space:nowrap;text-align:right}
 .up{color:var(--up)}.down{color:var(--down)}
 .news{height:86px;overflow:hidden}
 .news p{font-size:17px;font-weight:500;line-height:1.3;transition:opacity .6s}
 .news .src{font-size:12px;margin-top:6px}
 .home{font-size:12px;color:var(--dim);margin-top:6px}
+/* Navegación */
+.nav{grid-column:1/3;grid-row:4;display:flex;justify-content:center;gap:6px}
+.nav button{font:600 15px "Red Hat Text",sans-serif;color:var(--dim);background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:22px;padding:8px 22px;min-height:40px}
+.nav button.act{color:#07102b;background:var(--acc);border-color:var(--acc)}
+.view{grid-column:1/3;grid-row:2/4;display:none;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;gap:12px;min-height:0}
+.view .stats{grid-column:1/3}
+/* Geely */
+.car{display:flex;flex-direction:column;padding-bottom:6px}
+.spin{flex:1;min-height:0;position:relative;touch-action:pan-y;cursor:grab}
+.spin div{position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);max-width:100%;background:url(geely360.webp) no-repeat;background-size:400% 600%}
+.spin .hint{position:absolute;bottom:2px;left:0;right:0;text-align:center;font-size:12px;color:var(--dim)}
+.car .tl{font:800 15px "Red Hat Display",sans-serif}
+.car .ts{font:500 9px "Red Hat Text",sans-serif;fill:#8fa6d6}
+.stats{display:grid;grid-template-columns:1.05fr 1.05fr 1.35fr 1.15fr .85fr 1.05fr;gap:10px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px 13px}
+.stat .v{font:800 28px "Red Hat Display",sans-serif;line-height:1.05;white-space:nowrap}
+.stat .v small{font-size:15px;color:var(--dim);font-weight:500}
+.stat .l{color:var(--dim);font-size:13px;margin-bottom:4px;white-space:nowrap}
+.stat .x{color:var(--dim);font-size:12px;margin-top:2px}
+.stat svg{width:100%;height:78px;display:block}
+.bar{height:9px;border-radius:6px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,#3b4fd8,#4fc1ff)}
+.bar i.fuel{background:linear-gradient(90deg,#e8952c,#f7e463)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12px;font-weight:600;padding:4px 10px;border-radius:14px;background:rgba(7,16,43,.75);border:1px solid var(--line);white-space:nowrap}
+.chip.ok{color:var(--up)}.chip.bad{color:var(--down)}.chip.mid{color:var(--warn)}
+.side{display:flex;flex-direction:column;gap:8px}
+.seg{display:flex;gap:4px;background:rgba(255,255,255,.05);border-radius:12px;padding:3px}
+.seg button{flex:1;font:600 13px "Red Hat Text",sans-serif;color:var(--dim);background:none;border:0;border-radius:9px;padding:7px 4px;min-height:34px}
+.seg button.act{background:#22345f;color:var(--ink)}
+.pane{flex:1;min-height:0;overflow:auto;font-size:14px}
+.pane .r{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:6px 0;border-bottom:1px solid var(--line)}
+.pane .r:last-child{border-bottom:0}
+.pane .r b{font-weight:700;white-space:nowrap}
+.cmp{display:flex;gap:8px;margin:4px 0 8px}
+.cmp>div{flex:1;border-radius:12px;padding:8px 10px;background:rgba(255,255,255,.05)}
+.cmp .k{font-size:12px;color:var(--dim)}
+.cmp .n{font:800 22px "Red Hat Display",sans-serif}
+#gMap{height:100%;min-height:150px;border-radius:12px;overflow:hidden;background:#0d1d4a}
+.acts{display:flex;gap:6px}
+.acts button{flex:1;font:600 14px "Red Hat Text",sans-serif;color:var(--ink);background:#22345f;border:1px solid var(--line);border-radius:12px;min-height:44px;padding:6px}
+.acts button.on{background:rgba(79,193,255,.25);border-color:var(--acc)}
+.acts button:disabled{opacity:.5}
+/* Control de TV */
+#vTv{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)}
+.rmt{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.dpad{position:relative;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle at 50% 40%,#1d3270,#0d1d4a);border:1px solid var(--line);box-shadow:inset 0 2px 10px rgba(0,0,0,.4)}
+.dpad button{position:absolute;background:none;border:0;color:var(--ink);font-size:26px;width:86px;height:86px;border-radius:50%;-webkit-tap-highlight-color:transparent}
+.dpad button:active,.rk:active{background:rgba(79,193,255,.25)}
+.dpad .u{top:0;left:87px}.dpad .d{bottom:0;left:87px}.dpad .l{left:0;top:87px}.dpad .r{right:0;top:87px}
+.dpad .ok{top:75px;left:75px;width:110px;height:110px;background:#22345f;border:2px solid rgba(79,193,255,.5);font:800 22px "Red Hat Display",sans-serif}
+.rrow{display:flex;gap:12px}
+.rk{font:600 15px "Red Hat Text",sans-serif;color:var(--ink);background:#22345f;border:1px solid var(--line);border-radius:16px;min-width:76px;min-height:56px;padding:0 14px;-webkit-tap-highlight-color:transparent}
+.rk.pw{color:#ff6b6b}
+.tvside{display:flex;flex-direction:column;gap:12px}
+.np{display:flex;align-items:center;gap:12px}
+.np .dot{width:12px;height:12px;border-radius:50%;background:#4a5679;flex:none}
+.np.on .dot{background:var(--up);box-shadow:0 0 10px var(--up)}
+.np b{font:800 22px "Red Hat Display",sans-serif}
+.apps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.app{font:700 15px "Red Hat Text",sans-serif;color:#fff;border:0;border-radius:16px;min-height:74px;padding:8px;-webkit-tap-highlight-color:transparent}
+.vol{display:flex;gap:10px}.vol .rk{flex:1;font-size:20px}
+/* Velocidad de la red */
+#vRed{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}
+.sp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:12px;align-items:stretch}
+.sp .stat .v{font-size:44px}
+.spgo{font:700 18px "Red Hat Text",sans-serif;color:#07102b;background:var(--acc);border:0;border-radius:18px;padding:0 26px;min-height:64px}
+.spgo:disabled{opacity:.6}
+.spch{position:relative;min-height:0;display:flex;flex-direction:column}
+.spch .fig{flex:1;min-height:200px;position:relative}
+.spch .fig svg{position:absolute;top:0;left:0;width:100%;height:100%}
+.lg{display:flex;gap:16px;font-size:13px;color:var(--dim)}
+.lg i{display:inline-block;width:12px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+/* Timbre */
+.door{position:fixed;top:0;left:0;right:0;bottom:0;z-index:18;background:#030817;display:none;flex-direction:column;padding:18px 22px;gap:12px}
+.doorh{display:flex;align-items:center;gap:12px}
+.doorh b{font:800 28px "Red Hat Display",sans-serif;flex:1}
+.doorh button,.doorb button{font:700 17px "Red Hat Text",sans-serif;border:0;border-radius:14px;min-height:52px;padding:0 20px;color:var(--ink);background:#22345f}
+.doorh .x{background:#3a1e2a;color:#ffb3b3}
+.doorm{flex:1;min-height:0;position:relative;border-radius:18px;overflow:hidden;background:#000;display:flex;align-items:center;justify-content:center}
+.doorm img,.doorm video{max-width:100%;max-height:100%;width:100%;height:100%;object-fit:contain;display:block}
+.doorm .msg{position:absolute;color:var(--dim);font-size:16px;text-align:center;padding:20px}
+.doorb{display:flex;gap:10px;justify-content:center}
+.doorb .live{background:var(--acc);color:#07102b}
+.nav button.door-btn{color:var(--ink)}
+/* Protector de pantalla (álbum de Google Fotos) */
+.ss{position:fixed;top:0;left:0;right:0;bottom:0;z-index:16;background:#000;display:none;overflow:hidden}
+.ss>img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity 1.6s ease}
+.ss>img.vis{opacity:1}
+.ssi{position:absolute;left:28px;bottom:22px;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.8)}
+.ssi .h{font:800 64px "Red Hat Display",sans-serif;line-height:1;color:#fff;display:block;height:auto;text-align:left}
+.ssi .d{font-size:18px;margin-top:4px;opacity:.9}
+@media (prefers-reduced-motion:reduce){.ss>img{transition:none}}
+.ssb{position:absolute;right:24px;bottom:24px;display:flex;flex-direction:column;align-items:flex-end;gap:8px;max-width:55%}
+.ssb span{font:600 17px "Red Hat Text",sans-serif;color:#fff;background:rgba(7,16,43,.72);border-radius:16px;padding:8px 14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.ssb span.urg{background:rgba(160,30,40,.85)}
+.ssm{position:absolute;top:24px;right:24px;display:none;align-items:center;gap:14px;background:rgba(7,16,43,.8);border:1px solid rgba(120,170,255,.25);border-radius:22px;padding:12px 14px;max-width:520px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.ssm img,.ssm .ph{width:92px;height:92px;border-radius:12px;object-fit:cover;flex:none;background:#13234f;display:flex;align-items:center;justify-content:center;font-size:34px;color:var(--dim)}
+.ssm .tx{min-width:0;flex:1;color:#fff}
+.ssm .tx b{display:block;font:800 19px "Red Hat Display",sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ssm .tx span{display:block;font-size:14px;color:#b9c8ea;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ssm .tx small{display:block;font-size:12px;color:#8fa6d6;margin-top:2px}
+.ssm .bt{display:flex;gap:8px;margin-top:8px}
+.ssm button{width:50px;height:50px;border-radius:50%;border:1px solid rgba(120,170,255,.3);background:#22345f;color:#fff;font-size:18px}
+.ssm button.pp{background:var(--acc);color:#07102b;border:0;font-size:22px}
+/* Música (Music Assistant vía Home Assistant) */
+#vMus{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)}
+.np2{display:flex;flex-direction:column;gap:12px;min-height:0}
+.pls{display:flex;flex-wrap:wrap;gap:6px}
+.pl{font:600 14px "Red Hat Text",sans-serif;color:var(--dim);background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:18px;padding:0 14px;min-height:38px}
+.pl.act{color:#07102b;background:var(--acc);border-color:var(--acc)}
+.pl.on::after{content:" ♪"}
+.cov{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+.cov img,.cov .ph{max-width:100%;max-height:100%;aspect-ratio:1;border-radius:18px;object-fit:cover;box-shadow:0 14px 40px rgba(0,0,0,.45)}
+.cov .ph{width:220px;display:flex;align-items:center;justify-content:center;background:#13234f;font-size:64px;color:var(--dim)}
+.tt{text-align:center}
+.tt b{display:block;font:800 22px "Red Hat Display",sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tt span{color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.ctl{display:flex;justify-content:center;align-items:center;gap:14px}
+.ctl button{background:#22345f;border:1px solid var(--line);color:var(--ink);border-radius:50%;width:60px;height:60px;font-size:22px}
+.ctl .pp{width:76px;height:76px;font-size:30px;background:var(--acc);color:#07102b;border:0}
+.vl{display:flex;align-items:center;gap:10px;color:var(--dim)}
+.vl input{flex:1;-webkit-appearance:none;appearance:none;height:30px;border-radius:15px;background:linear-gradient(90deg,#1a2a5a,#4fc1ff);border:1px solid var(--line)}
+.vl input::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:#fff;border:3px solid #07102b}
+.lib{display:flex;flex-direction:column;gap:10px;min-height:0}
+.sbox{display:flex;gap:8px}
+.sbox input{flex:1;font:16px "Red Hat Text",sans-serif;color:var(--ink);background:#0d1d4a;border:1px solid var(--line);border-radius:12px;padding:0 14px;min-height:46px}
+.sbox button{font:700 15px "Red Hat Text",sans-serif;border:0;border-radius:12px;padding:0 16px;background:var(--acc);color:#07102b}
+.sbox .mic{background:#22345f;color:var(--ink);font-size:20px;padding:0 14px}
+.sbox .mic.rec{background:var(--down);color:#fff;animation:lvp 1.2s ease-in-out infinite}
+.mhint{font-size:13px;color:var(--warn);display:none}
+.items{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:4px;-webkit-overflow-scrolling:touch}
+.it{display:flex;align-items:center;gap:12px;text-align:left;background:none;border:0;border-radius:12px;padding:6px;color:var(--ink);width:100%}
+.it:active{background:rgba(79,193,255,.15)}
+.it img,.it .ph{width:52px;height:52px;border-radius:8px;object-fit:cover;flex:none;background:#13234f;display:flex;align-items:center;justify-content:center;color:var(--dim)}
+.it b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.it small{display:block;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.it div{min-width:0}
+.sec{font-size:12px;color:var(--acc);font-weight:700;margin:8px 4px 2px}
+/* Agenda (Google Calendar vía Home Assistant) */
+.nxt{font-size:14px;margin-top:4px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:330px}
+.nxt b{color:var(--ink);font-weight:600}
+.nxt i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle}
+#vAg{grid-template-columns:minmax(0,1fr)}
+.ag{overflow:auto;-webkit-overflow-scrolling:touch;min-height:0}
+.agd{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.agd:first-child{border-top:0}
+.agd h3{font:800 20px "Red Hat Display",sans-serif;line-height:1.1}
+.agd h3 small{display:block;font:500 13px "Red Hat Text",sans-serif;color:var(--dim);margin-top:2px}
+.agd.hoy h3{color:var(--acc)}
+.ev{display:flex;gap:10px;align-items:flex-start;padding:6px 10px;border-radius:12px;background:rgba(255,255,255,.04);margin-bottom:6px;border-left:4px solid}
+.ev .hr{font-weight:700;white-space:nowrap;min-width:76px}
+.ev div{min-width:0}
+.ev b{display:block;font-weight:600}
+.ev small{display:block;color:var(--dim)}
+.ev.pas{opacity:.45}
+.agl{display:flex;flex-wrap:wrap;gap:12px;font-size:13px;color:var(--dim);margin-bottom:6px}
+.agl i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle}
+/* Familia (ubicaciones) */
+#vFam{grid-template-columns:minmax(0,1.45fr) minmax(0,1fr)}
+#famMap{width:100%;height:100%;min-height:300px;border-radius:14px;overflow:hidden;background:#0d1d4a}
+.fams{display:flex;flex-direction:column;gap:8px;overflow:auto;min-height:0}
+.fp{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:16px;padding:10px 12px;text-align:left;color:var(--ink);width:100%;font:inherit}
+.fp .av{width:48px;height:48px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font:800 20px "Red Hat Display",sans-serif;color:#07102b;background-size:cover;background-position:center;border:3px solid}
+.fp div{min-width:0;flex:1}
+.fp b{display:block;font-size:17px}
+.fp .z{display:block;font-size:14px}
+.fp small{display:block;color:var(--dim);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fp .bt{font-size:13px;color:var(--dim);white-space:nowrap;text-align:right}
+.pin{width:40px;height:40px;border-radius:50%;border:3px solid;display:flex;align-items:center;justify-content:center;font:800 16px "Red Hat Display",sans-serif;color:#07102b;background-size:cover;background-position:center;box-shadow:0 3px 10px rgba(0,0,0,.5)}
+/* Lavadora y secadora (SmartThings) */
+.lav{position:fixed;right:16px;bottom:62px;z-index:12;display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+.lv{display:flex;align-items:center;gap:10px;background:#13234f;border:1px solid var(--line);border-radius:16px;padding:9px 14px;box-shadow:0 8px 24px rgba(0,0,0,.45);color:var(--ink);font:inherit;text-align:left}
+.lv .ic{font-size:22px}
+.lv b{display:block;font-size:15px}
+.lv small{display:block;font-size:12px;color:var(--dim)}
+.lv .bar{width:130px;margin-top:5px}
+.lv.fin{background:#163d2c;border-color:var(--up);animation:lvp 1.6s ease-in-out infinite}
+.lv.fin small{color:var(--up)}
+@keyframes lvp{50%{box-shadow:0 0 0 6px rgba(61,220,151,.25)}}
+@media (prefers-reduced-motion:reduce){.lv.fin{animation:none}}
+/* Deslizar para recargar */
+.ptr{position:fixed;top:0;left:50%;z-index:30;transform:translate(-50%,-60px);background:#13234f;border:1px solid var(--line);color:var(--ink);font:600 14px "Red Hat Text",sans-serif;padding:8px 16px;border-radius:20px;box-shadow:0 6px 20px rgba(0,0,0,.4);transition:transform .15s}
+.ptr.listo{background:var(--acc);color:#07102b}
+/* Casa (Home Assistant) */
+.withroom .hours{flex:none;height:70px;min-height:0;margin-bottom:6px}
+.withroom .dev{min-height:54px;padding:7px 10px}
+.withroom .devs{gap:6px}
+.withroom .room{padding-top:6px}
+.withroom .days{margin-bottom:6px}
+.withroom .day{padding:6px 4px}
+.withroom .day svg{width:28px;height:28px;margin:0 auto}
+.room{flex:1;display:none;flex-direction:column;border-top:1px solid var(--line);padding-top:8px}
+.room h2{display:flex;justify-content:space-between}
+.devs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;overflow:auto}
+.dev{font:500 14px "Red Hat Text",sans-serif;color:var(--ink);text-align:left;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:14px;padding:10px 12px;min-height:64px;display:flex;align-items:center;gap:10px;-webkit-tap-highlight-color:transparent}
+.dev svg{width:26px;height:26px;flex:none}
+.dev span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dev small{display:block;color:var(--dim);font-size:12px;white-space:nowrap}
+.dev.on{background:rgba(247,228,99,.16);border-color:rgba(247,228,99,.55)}
+.dev.on small{color:var(--warn)}
+.dev.busy{opacity:.55}
+.devw{position:relative;min-width:0}
+.devw .dev{width:100%}
+.devw.adj .dev{padding-right:50px}
+.adjb{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:rgba(7,16,43,.55);display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent}
+.adjb svg{width:20px;height:20px}
+/* Panel de luz */
+.lp{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(3,8,22,.72);z-index:15;display:none;align-items:center;justify-content:center}
+.lpc{width:min(560px,92vw);background:#0b1838;border:1px solid var(--line);border-radius:22px;padding:20px 22px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.lph{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.lph .dot{width:44px;height:44px;border-radius:50%;border:2px solid rgba(255,255,255,.25);flex:none}
+.lph b{font:800 22px "Red Hat Display",sans-serif;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lph button{font:600 15px "Red Hat Text",sans-serif;border:0;border-radius:12px;min-height:44px;padding:0 16px;color:var(--ink);background:#22345f}
+.lph button.pw.on{background:var(--warn);color:#07102b}
+.lrow{margin:12px 0}
+.lrow .lt{display:flex;justify-content:space-between;color:var(--dim);font-size:13px;margin-bottom:6px}
+.lrow .lt b{color:var(--ink);font-weight:700}
+.lp input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:36px;border-radius:18px;margin:0;outline:none;border:1px solid var(--line)}
+.lp input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;border-radius:50%;background:#fff;border:3px solid #07102b;box-shadow:0 2px 6px rgba(0,0,0,.4)}
+#lBri{background:linear-gradient(90deg,#1a2240,#f7e463)}
+#lCt{background:linear-gradient(90deg,#ffb15a,#fff4e0,#cfe3ff)}
+#lHue{background:linear-gradient(90deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00)}
+.sw{display:flex;flex-wrap:wrap;gap:8px}
+.sw button{width:44px;height:44px;border-radius:50%;border:2px solid rgba(255,255,255,.2)}
+.sw button.w{width:auto;border-radius:22px;padding:0 12px;font:600 13px "Red Hat Text",sans-serif;color:#07102b}
 /* Trayectos */
-.trip{position:absolute;left:10px;right:10px;bottom:10px;z-index:3;background:rgba(7,16,43,.92);border:1px solid var(--line);border-radius:14px;padding:10px 14px;display:none}
+.trip{position:absolute;left:10px;right:10px;bottom:92px;z-index:3;background:rgba(7,16,43,.92);border:1px solid var(--line);border-radius:14px;padding:10px 14px;display:none}
 .trip .row{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
 .trip .big{font-size:30px;line-height:1.1}
 .trip .st{font-size:13px;font-weight:600}
@@ -76,7 +332,18 @@ h2{font:600 12px "Red Hat Text",sans-serif;color:var(--acc);letter-spacing:.02em
 .cfg button{font:600 16px "Red Hat Text",sans-serif;color:#07102b;background:var(--acc);border:0;border-radius:12px;padding:12px 18px;margin:16px 10px 0 0;min-height:44px}
 .cfg button.sec{background:#22345f;color:var(--ink)}
 .cfg .note{font-size:13px;color:var(--dim);margin-top:10px}
-.dim{position:fixed;top:0;left:0;right:0;bottom:0;background:#000;opacity:0;pointer-events:none;transition:opacity 2s}
+.albs{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.alb{display:flex;align-items:center;gap:10px;background:#0d1d4a;border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.alb input{width:24px;height:24px;flex:none}
+.alb span{flex:1;min-width:0}
+.alb small{color:var(--dim)}
+.alb button{margin:0;padding:6px 12px;min-height:36px;font-size:13px}
+.albnew{display:grid;grid-template-columns:minmax(0,.6fr) minmax(0,1.4fr) auto;gap:8px;margin-top:8px}
+.albnew button{margin:0}
+.cfg label.alb{display:flex;margin:0;color:var(--ink);font-size:15px}
+.cfg .alb input{width:24px;height:24px;padding:0;margin:0;accent-color:var(--acc)}
+.cfg .alb button{margin:0;padding:6px 14px;min-height:36px;font-size:13px}
+.dim{z-index:17;position:fixed;top:0;left:0;right:0;bottom:0;background:#000;opacity:0;pointer-events:none;transition:opacity 2s}
 .err{color:var(--warn);font-size:12px}
 </style>
 </head>
@@ -86,6 +353,7 @@ h2{font:600 12px "Red Hat Text",sans-serif;color:var(--acc);letter-spacing:.02em
     <div>
       <div class="clock num" id="clock">--:--</div>
       <div class="date" id="date"></div>
+      <div class="nxt" id="nxt"></div>
     </div>
     <div class="now">
       <div id="nowIcon"></div>
@@ -98,33 +366,125 @@ h2{font:600 12px "Red Hat Text",sans-serif;color:var(--acc);letter-spacing:.02em
     <div class="aqi" id="aqi"><div class="muted" style="font-size:12px">Calidad del aire</div><div class="num">--</div><div class="muted" style="font-size:12px">—</div></div>
   </header>
 
-  <section class="card fc">
+  <section class="card fc vmain">
     <h2 id="cityTitle">Pronóstico</h2>
     <div class="days" id="days"></div>
     <div class="hours" id="hours"></div>
+    <div class="room" id="room"><h2><span id="roomTitle">Sala</span><span class="muted" id="roomInfo"></span></h2><div class="devs" id="devs"></div></div>
   </section>
 
-  <section class="card traffic">
-    <h2>Tráfico ahora</h2>
-    <iframe id="waze" title="Mapa de tráfico" loading="lazy"></iframe>
+  <section class="card traffic vmain">
+    <h2 id="mName">Geely</h2>
+    <div class="mini" id="mini" role="button" aria-label="Abrir Geely"><div class="mimg" id="mImg"></div><div class="mstat" id="mStat"></div><span class="mhint">Toca para ver más</span><div class="fqs" id="fqs"></div></div>
     <div id="trips"></div>
   </section>
 
-  <div class="bottom">
+  <div class="bottom vmain">
     <section class="card">
       <h2>Mercados</h2>
       <div class="mk">
-        <div class="m"><div class="muted">Dólar</div><div class="num" id="usd">--</div><div class="ch muted" id="usdc">MXN</div></div>
-        <div class="m"><div class="muted">Bitcoin</div><div class="num" id="btc">--</div><div class="ch" id="btcc"></div></div>
+        <div class="m"><div class="muted">Dólar · pesos</div><div class="num" id="usd">--</div><div class="ch" id="usdc"></div></div>
+        <div class="m"><div class="muted">Bitcoin · dólares</div><div class="num" id="btc">--</div><div class="ch" id="btcc"></div></div>
       </div>
+    </section>
+    <section class="card">
+      <h2>Pendientes</h2>
+      <div class="rec" id="rec"></div>
+    </section>
+    <section class="card sm">
+      <h2>Sol y luna <span id="smInfo"></span></h2>
+      <div class="smfig" id="smFig"><svg id="smSvg" aria-hidden="true"></svg></div>
+      <div class="smrow"><b id="smRise">↑ --</b><span class="muted" id="smTxt"></span><b id="smSet">-- ↓</b></div>
+      <div class="moon" id="smMoon"></div>
     </section>
     <section class="card">
       <h2>Noticias</h2>
       <div class="news"><p id="headline">Cargando noticias…</p><div class="src muted" id="hsrc"></div></div>
     </section>
   </div>
+  <section class="view" id="vGeely">
+    <div class="card car"><h2 id="gName">Geely</h2><div class="chips" id="gChips"></div><div class="spin" id="spin"><div id="spinImg"></div><span class="hint">Desliza para girar</span></div></div>
+    <div class="card side">
+      <div class="seg" id="gSeg"><button type="button" class="act" data-p="pUbi">Ubicación</button><button type="button" data-p="pCost">Costos</button><button type="button" data-p="pServ">Servicio</button></div>
+      <div class="pane" id="pUbi"><div id="gMap"></div></div>
+      <div class="pane" id="pCost" style="display:none"></div>
+      <div class="pane" id="pServ" style="display:none"></div>
+      <div class="acts"><button type="button" id="aClima">❄️ Clima</button><button type="button" id="aFind">📣 Localizar</button><button type="button" id="aRef">↻ Actualizar</button></div>
+    </div>
+    <div class="stats" id="gStats"><div class="stat muted" style="grid-column:1/-1">Conectando con Home Assistant…</div></div>
+  </section>
+  <section class="view" id="vTv">
+    <div class="card rmt">
+      <div class="dpad"><button type="button" class="u" data-k="DPAD_UP" aria-label="Arriba">▲</button><button type="button" class="l" data-k="DPAD_LEFT" aria-label="Izquierda">◀</button><button type="button" class="ok" data-k="DPAD_CENTER">OK</button><button type="button" class="r" data-k="DPAD_RIGHT" aria-label="Derecha">▶</button><button type="button" class="d" data-k="DPAD_DOWN" aria-label="Abajo">▼</button></div>
+      <div class="rrow"><button type="button" class="rk" data-k="BACK">↩ Atrás</button><button type="button" class="rk" data-k="HOME">⌂ Inicio</button><button type="button" class="rk" data-k="MEDIA_PLAY_PAUSE">▶︎❚❚ Play</button></div>
+    </div>
+    <div class="card tvside">
+      <div class="np" id="tvNp"><span class="dot"></span><div><b id="tvName">TV</b><div class="muted" id="tvApp">Buscando la TV en Home Assistant…</div></div></div>
+      <div class="vol"><button type="button" class="rk" data-k="VOLUME_DOWN" aria-label="Bajar volumen">🔉 −</button><button type="button" class="rk" data-k="VOLUME_MUTE" aria-label="Silenciar">🔇</button><button type="button" class="rk" data-k="VOLUME_UP" aria-label="Subir volumen">🔊 +</button><button type="button" class="rk pw" id="tvPw" aria-label="Encender o apagar">⏻</button></div>
+      <h2 style="margin:4px 0 0">Apps</h2>
+      <div class="apps" id="tvApps"></div>
+    </div>
+  </section>
+  <section class="view" id="vRed">
+    <div class="sp">
+      <div class="stat"><div class="l">⬇ Descarga</div><div class="v" id="spD">--<small> Mbps</small></div></div>
+      <div class="stat"><div class="l">⬆ Subida</div><div class="v" id="spU">--<small> Mbps</small></div></div>
+      <div class="stat"><div class="l">Ping</div><div class="v" id="spP">--<small> ms</small></div></div>
+      <button type="button" class="spgo" id="spGo">Probar ahora</button>
+    </div>
+    <div class="card spch">
+      <h2 style="display:flex;justify-content:space-between"><span>Últimas 24 horas</span><span class="muted" id="spWhen"></span></h2>
+      <div class="lg"><span><i style="background:#4fc1ff"></i>Descarga</span><span><i style="background:#3ddc97"></i>Subida</span></div>
+      <div class="fig"><svg id="spSvg" aria-label="Velocidad de las últimas 24 horas"></svg></div>
+    </div>
+  </section>
+  <section class="view" id="vMus">
+    <div class="card np2">
+      <div class="pls" id="mPls"></div>
+      <div class="cov" id="mCov"><div class="ph">♪</div></div>
+      <div class="tt"><b id="mT">Nada sonando</b><span id="mA"></span></div>
+      <div class="ctl"><button type="button" id="mPrev" aria-label="Anterior">⏮</button><button type="button" class="pp" id="mPP" aria-label="Reproducir o pausar">▶</button><button type="button" id="mNext" aria-label="Siguiente">⏭</button></div>
+      <div class="vl"><span>🔈</span><input type="range" id="mVol" min="0" max="100" aria-label="Volumen"><span id="mVolV">--</span></div>
+    </div>
+    <div class="card lib">
+      <form class="sbox" id="mForm"><input id="mQ" type="search" placeholder="Buscar canción, artista, álbum o playlist" autocomplete="off"><button type="button" class="mic" id="mMic" aria-label="Buscar por voz">🎤</button><button type="submit">Buscar</button></form>
+      <div class="mhint" id="mHint">Toca el 🎤 del teclado del iPad y di la canción o el artista. Busca solo al terminar de dictar.</div>
+      <div class="pls"><button type="button" class="pl act" data-l="playlist">Mis playlists</button><button type="button" class="pl" data-l="album">Álbumes</button><button type="button" class="pl" data-l="artist">Artistas</button><button type="button" class="pl" data-l="track">Favoritas</button></div>
+      <div class="items" id="mItems"><div class="muted">Cargando…</div></div>
+    </div>
+  </section>
+  <section class="view" id="vFam">
+    <div class="card" style="padding:8px"><div id="famMap"></div></div>
+    <div class="card" style="display:flex;flex-direction:column;min-height:0">
+      <h2 style="display:flex;justify-content:space-between"><span>Familia</span><span class="muted" id="famU"></span></h2>
+      <div class="fams" id="fams"><div class="muted">Cargando…</div></div>
+    </div>
+  </section>
+  <section class="view" id="vAg">
+    <div class="card" style="display:flex;flex-direction:column;min-height:0">
+      <h2 style="display:flex;justify-content:space-between"><span>Agenda · próximos 7 días</span><span class="muted" id="agU"></span></h2>
+      <div class="agl" id="agL"></div>
+      <div class="ag" id="agList"><div class="muted">Cargando…</div></div>
+    </div>
+  </section>
+  <nav class="nav"><button type="button" class="act" data-v="main">Inicio</button><button type="button" data-v="geely">Geely</button><button type="button" data-v="tv">TV</button><button type="button" data-v="fam">Familia</button><button type="button" data-v="ag">Agenda</button><button type="button" data-v="mus">Música</button><button type="button" data-v="red">Red</button><button type="button" class="door-btn" id="doorBtn">🔔 Puerta</button></nav>
 </div>
+<div class="ss" id="ss"><img id="ssA" alt=""><img id="ssB" alt=""><div class="ssi"><div class="h" id="ssH"></div><div class="d" id="ssD"></div></div><div class="ssb" id="ssB2"></div><div class="ssm" id="ssM"></div></div>
+<div class="ptr" id="ptr">↓ Desliza para recargar</div>
+<div class="lav" id="lav"></div>
 <div class="dim" id="dim"></div>
+<div class="door" id="door">
+  <div class="doorh"><b id="doorT">Puerta</b><span class="muted" id="doorS"></span><button type="button" class="x" id="doorX">Cerrar</button></div>
+  <div class="doorm" id="doorM"><span class="msg" id="doorMsg">Conectando…</span></div>
+  <div class="doorb"><button type="button" class="live" id="doorLive">▶ Ver en vivo</button><button type="button" id="doorFoto">Última foto</button></div>
+</div>
+<div class="lp" id="lp"><div class="lpc">
+  <div class="lph"><span class="dot" id="lDot"></span><b id="lName">Luz</b><button type="button" class="pw" id="lPw">Encender</button><button type="button" id="lX">Cerrar</button></div>
+  <div class="lrow" id="rBri"><div class="lt"><span>Brillo</span><b id="lBriV">--</b></div><input type="range" id="lBri" min="1" max="100" step="1"></div>
+  <div class="lrow" id="rCt"><div class="lt"><span>Temperatura</span><b id="lCtV">--</b></div><input type="range" id="lCt" min="2000" max="6500" step="50"></div>
+  <div class="lrow" id="rHue"><div class="lt"><span>Color</span><b id="lHueV"></b></div><input type="range" id="lHue" min="0" max="359" step="1"></div>
+  <div class="lrow" id="rSw"><div class="sw" id="lSw"></div></div>
+</div></div>
 <div class="cfg" id="cfg">
   <h3>Ajustes de este iPad</h3>
   <div class="note">Estos datos se guardan solo en este iPad (en la dirección de la página), nunca en GitHub.</div>
@@ -133,14 +493,35 @@ h2{font:600 12px "Red Hat Text",sans-serif;color:var(--acc);letter-spacing:.02em
   <label for="cHome">Ubicación de casa (latitud, longitud)</label>
   <input id="cHome" inputmode="decimal" placeholder="25.70, -100.30">
   <button class="sec" id="cGeo" type="button">Usar la ubicación de este iPad</button>
+  <label for="cHa">Home Assistant: dirección (vacío = la misma de esta página)</label>
+  <input id="cHa" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="http://homeassistant.local:8123">
+  <label for="cTok">Home Assistant: token de acceso de larga duración</label>
+  <input id="cTok" autocomplete="off" autocapitalize="off" spellcheck="false">
+  <label for="cArea">Área a mostrar</label>
+  <input id="cArea" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="sala">
+  <label for="cGeely">Geely: ID del dispositivo en Home Assistant</label>
+  <input id="cGeely" autocomplete="off" autocapitalize="off" spellcheck="false">
+  <label for="cKwh">Costo de la luz por kWh (con IVA), para el costo de carga</label>
+  <input id="cKwh" inputmode="decimal">
+  <label for="cGas">Precio de la gasolina por litro</label>
+  <input id="cGas" inputmode="decimal">
+  <label for="cCfe">Próxima fecha límite de pago CFE</label>
+  <input id="cCfe" type="date">
+  <label>Álbumes del protector de pantalla (marca los que quieres ver)</label>
+  <div class="albs" id="cAlbs"><div class="note">Cargando…</div></div>
+  <div class="albnew"><input id="cAlbN" placeholder="Nombre" maxlength="40"><input id="cAlbU" placeholder="Link compartido de Google Fotos" autocapitalize="off" spellcheck="false"><button type="button" id="cAlbAdd">Agregar</button></div>
+  <div><button class="sec" type="button" id="cAlbRef">↻ Actualizar fotos de los álbumes</button></div>
+  <div class="note" id="cAlbMsg"></div>
   <label for="cRoutes">Rutas (no editar si no es necesario)</label>
   <textarea id="cRoutes" spellcheck="false"></textarea>
   <div>
     <button id="cSave" type="button">Guardar</button>
     <button class="sec" id="cTest" type="button">Probar rutas ahora</button>
+    <button class="sec" id="cSens" type="button">Ver sensores de la Geely</button>
     <button class="sec" id="cClose" type="button">Cerrar</button>
   </div>
   <div class="note" id="cMsg"></div>
+  <pre class="note" id="cDump" style="white-space:pre-wrap;font-size:12px"></pre>
 </div>
 
 <script>
@@ -191,20 +572,22 @@ function tick() {
   $("date").textContent = ds.charAt(0).toUpperCase() + ds.slice(1);
   var h = d.getHours(), n = CFG.modoNoche;
   var noche = n.desde > n.hasta ? (h >= n.desde || h < n.hasta) : (h >= n.desde && h < n.hasta);
-  $("dim").style.opacity = noche ? n.brillo : 0;
+  $("dim").style.opacity = noche && !(window.PUERTA && PUERTA.abierta) ? (window.SS && SS.activo ? 0.8 : n.brillo) : 0;
 }
 
 /* --- Clima (Open-Meteo, gratis y sin llave) --- */
 function clima() {
   var u = "https://api.open-meteo.com/v1/forecast?latitude=" + CFG.lat + "&longitude=" + CFG.lon +
     "&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,is_day" +
-    "&hourly=temperature_2m,precipitation_probability&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,uv_index_max" +
+    "&hourly=temperature_2m,precipitation_probability&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,uv_index_max,daylight_duration" +
     "&timezone=" + encodeURIComponent(CFG.tz) + "&forecast_days=5";
   getJSON(u).then(function (w) {
     var c = w.current, dd = w.daily;
     $("nowIcon").innerHTML = icon(c.weather_code, c.is_day);
     $("nowTemp").innerHTML = Math.round(c.temperature_2m) + "<small>°C</small>";
     $("nowDesc").textContent = desc(c.weather_code) + " · se siente " + Math.round(c.apparent_temperature) + "°";
+    SOL = { rise: fechaLocal(dd.sunrise[0]), set: fechaLocal(dd.sunset[0]), uv: dd.uv_index_max[0], dl: dd.daylight_duration ? dd.daylight_duration[0] : null };
+    solLuna();
     $("nowFacts").innerHTML =
       '<span class="muted">Humedad</span><b>' + c.relative_humidity_2m + '%</b>' +
       '<span class="muted">Viento</span><b>' + Math.round(c.wind_speed_10m) + ' km/h</b>' +
@@ -229,11 +612,55 @@ function clima() {
   }).catch(function () { $("nowDesc").innerHTML = '<span class="err">Sin datos de clima</span>'; });
 }
 
+/* --- Sol y luna --- */
+var SOL = null;
+function fechaLocal(s) { var m = /(\d+)-(\d+)-(\d+)T(\d+):(\d+)/.exec(s || ""); return m ? new Date(+m[1], m[2] - 1, +m[3], +m[4], +m[5]) : null; }
+function hm24(d) { return ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2); }
+function faseLunar(d) {
+  var SIN = 29.530588853, ref = Date.UTC(2000, 0, 6, 18, 14);
+  var edad = (((d - ref) / 864e5) % SIN + SIN) % SIN, p = edad / SIN;
+  var ilum = (1 - Math.cos(2 * Math.PI * p)) / 2;
+  var N = ["Luna nueva", "Creciente", "Cuarto creciente", "Gibosa creciente", "Luna llena", "Gibosa menguante", "Cuarto menguante", "Menguante"];
+  return { p: p, ilum: ilum, nombre: N[Math.floor(p * 8 + 0.5) % 8] };
+}
+function lunaSVG(f) {
+  var r = 7, cx = 8, cy = 8, crece = f.p < 0.5;
+  var rx = Math.abs(Math.cos(2 * Math.PI * f.p)) * r;
+  var s1 = crece ? 1 : 0, s2 = crece ? (f.p > 0.25 ? 1 : 0) : (f.p > 0.75 ? 1 : 0);
+  var lit = f.ilum < 0.02 ? "" : '<path d="M' + cx + ' ' + (cy - r) + ' A' + r + ' ' + r + ' 0 0 ' + s1 + ' ' + cx + ' ' + (cy + r) + ' A' + rx.toFixed(2) + ' ' + r + ' 0 0 ' + s2 + ' ' + cx + ' ' + (cy - r) + 'Z" fill="#f3ecd2"/>';
+  return '<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#3a4466"/>' + lit + '</svg>';
+}
+function solLuna() {
+  var svg = $("smSvg"); if (!svg) return;
+  var f = faseLunar(new Date());
+  $("smMoon").innerHTML = lunaSVG(f) + '<span>' + f.nombre + ' · ' + Math.round(f.ilum * 100) + '%</span>';
+  if (!SOL || !SOL.rise || !SOL.set) return;
+  var now = new Date(), fr = (now - SOL.rise) / (SOL.set - SOL.rise), dia = fr >= 0 && fr <= 1;
+  var dl = SOL.dl ? SOL.dl / 60 : (SOL.set - SOL.rise) / 6e4;
+  $("smInfo").textContent = Math.floor(dl / 60) + " h " + Math.round(dl % 60) + " min · UV " + Math.round(SOL.uv || 0);
+  $("smRise").textContent = "↑ " + hm24(SOL.rise); $("smSet").textContent = hm24(SOL.set) + " ↓";
+  if (dia) { var q = Math.round((SOL.set - now) / 6e4); $("smTxt").textContent = (q >= 60 ? Math.floor(q / 60) + " h " : "") + (q % 60) + " min de sol"; }
+  else $("smTxt").textContent = fr < 0 ? "antes del amanecer" : "después del atardecer";
+  var W = svg.clientWidth, H = svg.clientHeight; if (!W || !H) return;
+  var x0 = 10, x1 = W - 10, cx = W / 2, R = (x1 - x0) / 2, base = H - 8, alto = H - 16;
+  var t = Math.max(0, Math.min(1, fr)), th = Math.PI * (1 - t);
+  var sx = cx + R * Math.cos(th), sy = base - alto * Math.sin(th);
+  var arco = "M" + x0 + " " + base + " A" + R + " " + alto + " 0 0 1 " + x1 + " " + base;
+  svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+  svg.innerHTML = '<line x1="0" y1="' + base + '" x2="' + W + '" y2="' + base + '" stroke="rgba(143,166,214,.25)"/>' +
+    '<path d="' + arco + '" fill="none" stroke="rgba(247,228,99,.28)" stroke-width="2.5"/>' +
+    (dia ? '<path d="' + arco + '" fill="none" stroke="#f7e463" stroke-width="2.5" pathLength="1" stroke-dasharray="' + t + ' 1"/>' : "") +
+    (dia ? '<circle cx="' + sx + '" cy="' + sy + '" r="11" fill="rgba(247,228,99,.22)"/><circle cx="' + sx + '" cy="' + sy + '" r="6.5" fill="#f7e463"/>'
+         : '<circle cx="' + sx + '" cy="' + sy + '" r="7" fill="#4a5679"/>');
+}
+if (window.ResizeObserver) { var smRO = new ResizeObserver(solLuna); smRO.observe($("smFig")); }
+
 /* --- Calidad del aire (Open-Meteo) --- */
 function aire() {
   var u = "https://air-quality-api.open-meteo.com/v1/air-quality?latitude=" + CFG.lat + "&longitude=" + CFG.lon + "&current=us_aqi,pm2_5&timezone=" + encodeURIComponent(CFG.tz);
   getJSON(u).then(function (a) {
     var v = Math.round(a.current.us_aqi), t, col;
+    if (isNaN(v)) return;
     if (v <= 50) { t = "Buena"; col = "#3ddc97"; } else if (v <= 100) { t = "Aceptable"; col = "#f7e463"; }
     else if (v <= 150) { t = "Mala (sensibles)"; col = "#ffa94d"; } else if (v <= 200) { t = "Mala"; col = "#ff6b6b"; } else { t = "Muy mala"; col = "#c77dff"; }
     $("aqi").innerHTML = '<div class="muted" style="font-size:12px">Calidad del aire</div><div class="num" style="color:' + col + '">' + v + '</div><div style="font-size:12px;color:' + col + '">' + t + '</div>';
@@ -246,17 +673,17 @@ function mercados() {
     var b = r.bitcoin, ch = b.usd_24h_change;
     $("btc").textContent = "$" + fmt(b.usd, 0);
     $("btcc").className = "ch " + (ch >= 0 ? "up" : "down");
-    $("btcc").textContent = (ch >= 0 ? "▲ " : "▼ ") + fmt(Math.abs(ch), 1) + "% 24h · $" + fmt(b.mxn / 1e6, 2) + "M MXN";
+    $("btcc").textContent = (ch >= 0 ? "▲" : "▼") + fmt(Math.abs(ch), 1) + "%";
   }).catch(function () { $("btcc").innerHTML = '<span class="err">sin datos</span>'; });
 
   getJSON("https://open.er-api.com/v6/latest/USD").then(function (r) {
     var v = r.rates.MXN, prev = null;
     try { prev = JSON.parse(localStorage.getItem("usdPrev") || "null"); } catch (e) {}
     $("usd").textContent = "$" + fmt(v, 2);
-    var hoy = new Date().toDateString(), txt = "MXN por USD";
+    var hoy = new Date().toDateString(), txt = "";
     if (prev && prev.d !== hoy) {
       var diff = v - prev.v;
-      txt = '<span class="' + (diff <= 0 ? "up" : "down") + '">' + (diff >= 0 ? "▲ " : "▼ ") + fmt(Math.abs(diff), 2) + '</span> <span class="muted">vs ayer</span>';
+      txt = '<span class="' + (diff <= 0 ? "up" : "down") + '">' + (diff >= 0 ? "▲" : "▼") + fmt(Math.abs(diff), 2) + '</span>';
     }
     $("usdc").innerHTML = txt;
     try { if (!prev || prev.d !== hoy) localStorage.setItem("usdPrev", JSON.stringify({ d: hoy, v: v })); } catch (e) {}
@@ -293,28 +720,31 @@ function rotar() {
 
 /* --- Tráfico (mapa en vivo de Waze) --- */
 function trafico() {
+  if (!$("waze")) return;
   $("waze").src = "https://embed.waze.com/iframe?zoom=" + CFG.wazeZoom + "&lat=" + CFG.lat + "&lon=" + CFG.lon + "&ct=livemap&t=" + Date.now();
 }
 
 /* --- Ajustes privados: viven en el #hash de la URL y en localStorage del iPad --- */
-var P = { k: "", h: "", r: [] };
+var P = { k: "", h: "", r: [], u: "", t: "", a: "sala", g: "41d02b4defecb0483f4cd03e4aaf9346", e: 4.69, p: 29.99 };
 function leerCfg() {
-  try { var s = JSON.parse(localStorage.getItem("cfgPriv") || "null"); if (s) P = s; } catch (e) {}
+  try { var s = JSON.parse(localStorage.getItem("cfgPriv") || "null"); if (s) for (var k0 in s) if (s[k0] !== undefined && s[k0] !== null) P[k0] = s[k0]; } catch (e) {}
   var hs = location.hash.replace(/^#/, "");
   if (hs) hs.split("&").forEach(function (kv) {
     var i = kv.indexOf("="); if (i < 0) return;
     var k = kv.slice(0, i), v = decodeURIComponent(kv.slice(i + 1));
-    if (k === "k") P.k = v; else if (k === "h") P.h = v;
+    if (k === "k") P.k = v; else if (k === "h") P.h = v; else if (k === "u") P.u = v; else if (k === "t") P.t = v; else if (k === "a") P.a = v; else if (k === "g") P.g = v; else if (k === "e") P.e = parseFloat(v) || P.e; else if (k === "p") P.p = parseFloat(v) || P.p; else if (k === "cfe") P.cfe = v; else if (k === "alb") { try { P.alb = JSON.parse(v); } catch (e) {} }
     else if (k === "r") { try { P.r = JSON.parse(v); } catch (e) {} }
   });
 }
+function valoresBase() { if (!P.cfe) P.cfe = "2026-11-21"; if (!(P.e > 0)) P.e = 4.69; if (!(P.p > 0)) P.p = 29.99; if (!P.g) P.g = "41d02b4defecb0483f4cd03e4aaf9346"; }
 function guardarCfg() {
   try { localStorage.setItem("cfgPriv", JSON.stringify(P)); } catch (e) {}
-  var hs = "k=" + encodeURIComponent(P.k) + "&h=" + encodeURIComponent(P.h) + "&r=" + encodeURIComponent(JSON.stringify(P.r));
+  var hs = "k=" + encodeURIComponent(P.k) + "&h=" + encodeURIComponent(P.h) + "&r=" + encodeURIComponent(JSON.stringify(P.r)) +
+    "&u=" + encodeURIComponent(P.u || "") + "&t=" + encodeURIComponent(P.t || "") + "&a=" + encodeURIComponent(P.a || "sala") + "&g=" + encodeURIComponent(P.g || "") + "&e=" + P.e + "&p=" + P.p + "&cfe=" + encodeURIComponent(P.cfe || "") + "&alb=" + encodeURIComponent(JSON.stringify(P.alb || []));
   try { history.replaceState(null, "", location.pathname + "#" + hs); } catch (e) { location.hash = hs; }
 }
 function abrirCfg() {
-  $("cKey").value = P.k; $("cHome").value = P.h; $("cRoutes").value = JSON.stringify(P.r); $("cMsg").textContent = "";
+  $("cKey").value = P.k; $("cHome").value = P.h; $("cHa").value = P.u || ""; $("cTok").value = P.t || ""; $("cArea").value = P.a || "sala"; $("cGeely").value = P.g || ""; $("cKwh").value = P.e; $("cGas").value = P.p; $("cCfe").value = P.cfe || ""; pintarAlbumes(); $("cDump").textContent = ""; $("cRoutes").value = JSON.stringify(P.r); $("cMsg").textContent = "";
   $("cfg").style.display = "block";
 }
 (function () {
@@ -334,9 +764,16 @@ function abrirCfg() {
   });
   $("cSave").addEventListener("click", function () {
     P.k = $("cKey").value.trim(); P.h = $("cHome").value.replace(/\s/g, "");
+    P.u = $("cHa").value.trim().replace(/\/$/, ""); P.t = $("cTok").value.trim(); P.a = $("cArea").value.trim() || "sala"; P.g = $("cGeely").value.trim(); P.e = parseFloat($("cKwh").value) || 4.69; P.p = parseFloat($("cGas").value) || 29.99; if ($("cCfe").value) P.cfe = $("cCfe").value;
     try { P.r = JSON.parse($("cRoutes").value || "[]"); } catch (e) { $("cMsg").textContent = "Las rutas no tienen un formato válido."; return; }
     guardarCfg(); $("cMsg").textContent = "Guardado. Si vas a agregar el tablero a la pantalla de inicio, hazlo ahora desde Safari.";
-    rutas();
+    rutas(); casa(); geely(); frecuentes();
+  });
+  $("cSens").addEventListener("click", function () {
+    $("cDump").textContent = "Cargando…";
+    leerGeely().then(function (j) {
+      $("cDump").textContent = (j.name || "") + "\n" + j.e.map(function (e) { return e.id + " | " + e.n + " | " + e.s + " " + (e.u || "") + (e.dc ? " [" + e.dc + "]" : ""); }).join("\n");
+    }).catch(function (e) { $("cDump").textContent = "Error: " + e.message; });
   });
   $("cTest").addEventListener("click", function () { $("cfg").style.display = "none"; rutas(true); });
 })();
@@ -374,6 +811,9 @@ function rutas(forzar) {
       if (r.m === "llegada") {
         var salir = new Date(x.obj.getTime() - s.travelTimeInSeconds * 1000), faltan = Math.round((salir - Date.now()) / 60e3);
         var cls = faltan > 15 ? "ok" : faltan > 5 ? "mid" : "bad";
+        var clave = r.n + "_" + new Date().toDateString();
+        BANDA.salir = faltan <= 30 ? (faltan > 0 ? r.n + " · salir " + hm(salir) + " (" + faltan + " min)" : r.n + " · ¡salgan ya!") : null;
+        if (faltan <= 15 && !DESPERTO[clave]) { DESPERTO[clave] = 1; despertar(); }
         extra = '<span class="st ' + cls + '">' + (faltan > 0 ? "Salir a las " + hm(salir) + " (en " + faltan + " min)" : "¡Salgan ya!") + '</span>';
       } else {
         var llega = new Date(Math.max(Date.now(), x.obj.getTime()) + s.travelTimeInSeconds * 1000);
@@ -386,18 +826,1113 @@ function rutas(forzar) {
   });
 }
 
+/* --- Casa: Home Assistant (API REST con token) --- */
+var DOM = ["light", "switch", "fan", "cover", "media_player", "climate", "input_boolean"];
+function haBase() { return P.u || (location.port === "8123" || location.pathname.indexOf("/local/") === 0 ? location.origin : ""); }
+function ha(path, body) {
+  return fetch(haBase() + path, {
+    method: body ? "POST" : "GET", cache: "no-store",
+    headers: { "Authorization": "Bearer " + P.t, "Content-Type": "application/json" },
+    body: body ? JSON.stringify(body) : undefined
+  }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.headers.get("content-type").indexOf("json") >= 0 ? r.json() : r.text(); });
+}
+function devIcon(d, on) {
+  var c = on ? "#f7e463" : "#8fa6d6";
+  if (d === "light") return '<svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z" fill="' + (on ? "rgba(247,228,99,.35)" : "none") + '" stroke="' + c + '" stroke-width="1.8" stroke-linecap="round"/></svg>';
+  if (d === "fan") return '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2" fill="' + c + '"/><path d="M12 10c0-4 1-7 4-7s2 5-2 7M14 12c4 0 7 1 7 4s-5 2-7-2M12 14c0 4-1 7-4 7s-2-5 2-7M10 12c-4 0-7-1-7-4s5-2 7 2" fill="none" stroke="' + c + '" stroke-width="1.6"/></svg>';
+  if (d === "cover") return '<svg viewBox="0 0 24 24"><path d="M4 4h16M5 4v16M19 4v16M5 8h14M5 12h14M5 16h14" stroke="' + c + '" stroke-width="1.6" fill="none"/></svg>';
+  if (d === "media_player") return '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="12" rx="2" fill="none" stroke="' + c + '" stroke-width="1.8"/><path d="M9 21h6" stroke="' + c + '" stroke-width="1.8"/></svg>';
+  if (d === "climate") return '<svg viewBox="0 0 24 24"><path d="M12 3v18M4 7l16 10M20 7L4 17" stroke="' + c + '" stroke-width="1.6"/></svg>';
+  return '<svg viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="3" fill="none" stroke="' + c + '" stroke-width="1.8"/><circle cx="12" cy="' + (on ? 8 : 16) + '" r="2" fill="' + c + '"/></svg>';
+}
+function estadoTxt(d, s, b) {
+  if (s === "unavailable") return "sin conexión";
+  if (d === "light" && s === "on" && b) return "encendida " + Math.round(b / 2.55) + "%";
+  if (d === "cover") return s === "open" ? "abierta" : s === "closed" ? "cerrada" : s;
+  if (d === "climate") return s === "off" ? "apagado" : s;
+  return s === "on" || s === "playing" ? "encendido" : s === "off" || s === "standby" ? "apagado" : s;
+}
+var TPL = "{% set D = " + JSON.stringify(DOM) + " %}{% set ns = namespace(o=[]) %}" +
+  "{% for e in area_entities(A) %}{% if e.split('.')[0] in D %}" +
+  "{% set ns.o = ns.o + [{'id': e, 'n': state_attr(e,'friendly_name'), 's': states(e), 'b': state_attr(e,'brightness'), 'cm': state_attr(e,'supported_color_modes'), 'ct': state_attr(e,'color_temp_kelvin'), 'mn': state_attr(e,'min_color_temp_kelvin'), 'mx': state_attr(e,'max_color_temp_kelvin'), 'hs': state_attr(e,'hs_color'), 'rgb': state_attr(e,'rgb_color')}] %}" +
+  "{% endif %}{% endfor %}{{ {'area': area_name(A), 'dev': ns.o, 'home': [state_attr('zone.home','latitude'), state_attr('zone.home','longitude')]} | to_json }}";
+var casaOk = false;
+function casa() {
+  if (!P.t || !haBase()) { $("room").style.display = "none"; $("room").parentNode.className = "card fc vmain"; return; }
+  ha("/api/template", { template: TPL.replace(/\bA\b/g, JSON.stringify(P.a || "sala")) }).then(function (txt) {
+    var j = typeof txt === "string" ? JSON.parse(txt) : txt;
+    if (!P.h && j.home && j.home[0]) P.h = j.home[0] + "," + j.home[1];   // ubicación de casa desde Home Assistant
+    $("room").style.display = "flex"; $("room").parentNode.className = "card fc vmain withroom";
+    $("roomTitle").textContent = j.area || P.a;
+    // Las TVs (onn y LG) se controlan en la pestaña TV, no aquí
+    j.dev = j.dev.filter(function (d) { return d.id.indexOf("media_player.") !== 0 && !/webos|\bonn\b|\btv\b/i.test(d.id + " " + (d.n || "")); });
+    var on = j.dev.filter(function (d) { return ["on", "open", "playing", "heat", "cool", "auto"].indexOf(d.s) >= 0; }).length;
+    $("roomInfo").textContent = j.dev.length ? on + " de " + j.dev.length + " encendidos" : "";
+    DEVS = {};
+    $("devs").innerHTML = j.dev.length ? j.dev.map(function (d) {
+      DEVS[d.id] = d;
+      var dom = d.id.split(".")[0], isOn = ["on", "open", "playing", "heat", "cool", "auto"].indexOf(d.s) >= 0;
+      var adj = dom === "light" && esRegulable(d);
+      var ic = devIcon(dom, isOn);
+      if (dom === "light" && isOn && d.rgb) ic = ic.replace(/rgba\(247,228,99,\.35\)/, "rgba(" + d.rgb.join(",") + ",.75)");
+      return '<div class="devw' + (adj ? " adj" : "") + '"><button class="dev' + (isOn ? " on" : "") + '" data-id="' + d.id + '" type="button">' + ic +
+        '<div style="min-width:0"><span>' + String(d.n || d.id).replace(/</g, "&lt;") + '</span><small>' + estadoTxt(dom, d.s, d.b) + '</small></div></button>' +
+        (adj ? '<button class="adjb" type="button" data-adj="' + d.id + '" aria-label="Ajustar luz"><svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8" stroke="#eaf1ff" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="7" r="2.3" fill="none" stroke="#4fc1ff" stroke-width="2"/><circle cx="10" cy="17" r="2.3" fill="none" stroke="#4fc1ff" stroke-width="2"/></svg></button>' : "") + '</div>';
+    }).join("") : '<div class="muted" style="grid-column:1/-1">No hay dispositivos en el área "' + (P.a || "sala") + '". Revisa el nombre del área en Ajustes.</div>';
+    casaOk = true;
+    if (LP.id && DEVS[LP.id] && Date.now() - LP.t > 2500) pintarPanel();
+  }).catch(function (e) {
+    $("room").style.display = "flex"; $("room").parentNode.className = "card fc vmain withroom";
+    $("devs").innerHTML = '<div class="err" style="grid-column:1/-1">No se pudo conectar con Home Assistant (' + e.message + '). ' + (e.message === "401" ? "El token no es válido: crea uno nuevo y pégalo completo en Ajustes." : "Revisa la dirección y el token en Ajustes.") + '</div>';
+  });
+}
+$("devs").addEventListener("click", function (ev) {
+  var a = ev.target; while (a && a !== this && !a.getAttribute("data-adj")) a = a.parentNode;
+  if (a && a !== this) { abrirPanel(a.getAttribute("data-adj")); return; }
+  var b = ev.target; while (b && b !== this && !b.getAttribute("data-id")) b = b.parentNode;
+  if (!b || b === this) return;
+  b.className += " busy";
+  ha("/api/services/homeassistant/toggle", { entity_id: b.getAttribute("data-id") })
+    .then(function () { setTimeout(casa, 400); }).catch(function () { setTimeout(casa, 400); });
+});
+
+/* --- Panel de luces regulables y de color --- */
+var DEVS = {}, LP = { id: null, t: 0, timer: null, pend: null };
+var MCOLOR = ["hs", "rgb", "rgbw", "rgbww", "xy"];
+function modos(d) { return d.cm || []; }
+function tieneColor(d) { return modos(d).some(function (m) { return MCOLOR.indexOf(m) >= 0; }); }
+function tieneCt(d) { return modos(d).indexOf("color_temp") >= 0; }
+function esRegulable(d) { return modos(d).some(function (m) { return m !== "onoff"; }); }
+function kRgb(k) { // color aproximado de una temperatura en Kelvin, solo para mostrar
+  var t = k / 100, r, g, b;
+  r = t <= 66 ? 255 : 329.7 * Math.pow(t - 60, -0.1332);
+  g = t <= 66 ? 99.47 * Math.log(t) - 161.12 : 288.12 * Math.pow(t - 60, -0.0755);
+  b = t >= 66 ? 255 : t <= 19 ? 0 : 138.52 * Math.log(t - 10) - 305.04;
+  return [r, g, b].map(function (v) { return Math.max(0, Math.min(255, Math.round(v))); });
+}
+var SW = [["Rojo", 0], ["Naranja", 25], ["Amarillo", 50], ["Verde", 120], ["Turquesa", 175], ["Azul", 225], ["Morado", 275], ["Rosa", 320]];
+function abrirPanel(id) {
+  LP.id = id; LP.t = 0; var d = DEVS[id]; if (!d) return;
+  $("lName").textContent = d.n || id;
+  $("rBri").style.display = "";
+  $("rCt").style.display = tieneCt(d) ? "" : "none";
+  $("rHue").style.display = tieneColor(d) ? "" : "none";
+  var sw = "";
+  if (tieneCt(d)) sw += [["Cálida", 2700], ["Neutra", 4000], ["Fría", 6000]].map(function (w) { var c = kRgb(w[1]); return '<button type="button" class="w" data-k="' + w[1] + '" style="background:rgb(' + c.join(",") + ')">' + w[0] + '</button>'; }).join("");
+  if (tieneColor(d)) sw += SW.map(function (s) { return '<button type="button" data-h="' + s[1] + '" aria-label="' + s[0] + '" style="background:hsl(' + s[1] + ',100%,50%)"></button>'; }).join("");
+  $("lSw").innerHTML = sw; $("rSw").style.display = sw ? "" : "none";
+  if (tieneCt(d)) { $("lCt").min = d.mn || 2000; $("lCt").max = d.mx || 6500; }
+  pintarPanel();
+  $("lp").style.display = "flex";
+}
+function pintarPanel() {
+  var d = DEVS[LP.id]; if (!d) return;
+  var on = d.s === "on", bri = d.b ? Math.round(d.b / 2.55) : 0;
+  $("lPw").textContent = on ? "Apagar" : "Encender"; $("lPw").className = "pw" + (on ? " on" : "");
+  $("lBri").value = on ? Math.max(1, bri) : 1; $("lBriV").textContent = on ? Math.max(1, bri) + "%" : "apagada";
+  if (d.ct) { $("lCt").value = d.ct; $("lCtV").textContent = d.ct + " K"; } else $("lCtV").textContent = "--";
+  if (d.hs) $("lHue").value = Math.round(d.hs[0]);
+  var c = on ? (d.rgb ? d.rgb : d.ct ? kRgb(d.ct) : [247, 228, 99]) : [40, 50, 80];
+  $("lDot").style.background = "rgb(" + c.join(",") + ")";
+  $("lDot").style.boxShadow = on ? "0 0 24px rgba(" + c.join(",") + ",.7)" : "none";
+}
+function enviarLuz(datos, ya) {
+  LP.t = Date.now(); LP.pend = datos;
+  clearTimeout(LP.timer);
+  LP.timer = setTimeout(function () {
+    var d = LP.pend; LP.pend = null; d.entity_id = LP.id;
+    ha("/api/services/light/turn_on", d).then(function () { setTimeout(casa, 500); }).catch(function () {});
+  }, ya ? 0 : 280);
+}
+(function () {
+  $("lX").addEventListener("click", function () { $("lp").style.display = "none"; LP.id = null; });
+  $("lp").addEventListener("click", function (e) { if (e.target === this) { this.style.display = "none"; LP.id = null; } });
+  $("lPw").addEventListener("click", function () {
+    var d = DEVS[LP.id]; if (!d) return; LP.t = Date.now();
+    ha("/api/services/light/" + (d.s === "on" ? "turn_off" : "turn_on"), { entity_id: LP.id }).then(function () { setTimeout(casa, 500); });
+    d.s = d.s === "on" ? "off" : "on"; pintarPanel();
+  });
+  $("lBri").addEventListener("input", function () { $("lBriV").textContent = this.value + "%"; enviarLuz({ brightness_pct: +this.value }); });
+  $("lBri").addEventListener("change", function () { enviarLuz({ brightness_pct: +this.value }, true); });
+  $("lCt").addEventListener("input", function () { $("lCtV").textContent = this.value + " K"; var c = kRgb(+this.value); $("lDot").style.background = "rgb(" + c.join(",") + ")"; enviarLuz({ color_temp_kelvin: +this.value }); });
+  $("lCt").addEventListener("change", function () { enviarLuz({ color_temp_kelvin: +this.value }, true); });
+  $("lHue").addEventListener("input", function () { $("lDot").style.background = "hsl(" + this.value + ",100%,50%)"; enviarLuz({ hs_color: [+this.value, 100] }); });
+  $("lHue").addEventListener("change", function () { enviarLuz({ hs_color: [+this.value, 100] }, true); });
+  $("lSw").addEventListener("click", function (e) {
+    var b = e.target; if (!b.getAttribute) return;
+    if (b.getAttribute("data-k")) { var k = +b.getAttribute("data-k"); $("lCt").value = k; $("lCtV").textContent = k + " K"; $("lDot").style.background = "rgb(" + kRgb(k).join(",") + ")"; enviarLuz({ color_temp_kelvin: k }, true); }
+    else if (b.getAttribute("data-h") !== null) { var hh = +b.getAttribute("data-h"); $("lHue").value = hh; $("lDot").style.background = "hsl(" + hh + ",100%,50%)"; enviarLuz({ hs_color: [hh, 100] }, true); }
+  });
+})();
+
+/* --- Geely (sensores del plugin, detectados por nombre y unidad) --- */
+var GTPL = "{% set ns = namespace(o=[]) %}{% for e in device_entities(G) %}" +
+  "{% set ns.o = ns.o + [{'id': e, 'n': state_attr(e,'friendly_name'), 's': states(e), 'u': state_attr(e,'unit_of_measurement'), 'dc': state_attr(e,'device_class'), 'lat': state_attr(e,'latitude'), 'lon': state_attr(e,'longitude')}] %}" +
+  "{% endfor %}{{ {'name': device_attr(G,'name_by_user') or device_attr(G,'name'), 'e': ns.o} | to_json }}";
+function leerGeely() {
+  return ha("/api/template", { template: GTPL.replace(/\bG\b/g, JSON.stringify(P.g)) }).then(function (t) { return typeof t === "string" ? JSON.parse(t) : t; });
+}
+function num(e) { var v = e ? parseFloat(e.s) : NaN; return isNaN(v) ? null : v; }
+function pick(list, test, avoid) {
+  var c = list.filter(function (e) { var k = (e.id + " " + (e.n || "")).toLowerCase(); return test(e, k) && !(avoid && avoid.test(k)) && num(e) !== null; });
+  return c[0] || null;
+}
+function clasificar(L) {
+  var R = {};
+  R.bat = pick(L, function (e, k) { return (e.dc === "battery" || e.u === "%") && /bat|soc|charge|carga|energ/.test(k); }, /12v|aux|key|llave|phone/) ||
+          pick(L, function (e) { return e.dc === "battery"; });
+  var ranges = L.filter(function (e) { var k = (e.id + " " + (e.n || "")).toLowerCase(); return /km|mi/.test(e.u || "") && /range|autonom|alcance|endurance|mileage_ev|ev_mileage|remain/.test(k) && !/odo/.test(k) && num(e) !== null; });
+  R.rng = ranges.filter(function (e) { return /elec|ev|bat|bater|pure/.test((e.id + " " + (e.n || "")).toLowerCase()); })[0] || null;
+  function rk(re) { return ranges.filter(function (e) { return e !== R.rng && re.test((e.id + " " + (e.n || "")).toLowerCase()); })[0] || null; }
+  R.rngTot = rk(/combin|total|tot/) || rk(/hybrid|fuel|gas/);
+  if (!R.rng && ranges.length) R.rng = ranges[0];
+  R.odo = pick(L, function (e, k) { return /odo|kilometraje|total_distance|total_mileage|mileage/.test(k) && /km|mi/.test(e.u || ""); }, /range|autonom|remain/);
+  R.tin = pick(L, function (e, k) { return (e.dc === "temperature" || /°/.test(e.u || "")) && /interior|cabin|inside|inner|cabina|indoor|in_car|incar/.test(k); }) ||
+          pick(L, function (e) { return e.dc === "temperature" || /°/.test(e.u || ""); }, /exterior|outside|outdoor|ambient|bat|motor|engine|coolant|ext/);
+  var tires = L.filter(function (e) { var k = (e.id + " " + (e.n || "")).toLowerCase(); return (e.dc === "pressure" || /psi|kpa|bar/i.test(e.u || "")) && /tire|tyre|llanta|neum|wheel|press/.test(k) && num(e) !== null; });
+  function pos(re) { return tires.filter(function (e) { return re.test((e.id + " " + (e.n || "")).toLowerCase().replace(/[^a-z]/g, "_")); })[0] || null; }
+  R.fl = pos(/front_?left|left_?front|(^|_)fl(_|$)|delantera_?izq|izq.*delant|lf(_|$)/);
+  R.fr = pos(/front_?right|right_?front|(^|_)fr(_|$)|delantera_?der|der.*delant|rf(_|$)/);
+  R.rl = pos(/rear_?left|left_?rear|(^|_)rl(_|$)|trasera_?izq|izq.*tras|lr(_|$)/);
+  R.rr = pos(/rear_?right|right_?rear|(^|_)rr(_|$)|trasera_?der|der.*tras/);
+  if (!R.fl && !R.fr && tires.length === 4) { R.fl = tires[0]; R.fr = tires[1]; R.rl = tires[2]; R.rr = tires[3]; }
+  var fuels = L.filter(function (e) { var k = (e.id + " " + (e.n || "")).toLowerCase(); return /fuel|gas|petrol|combust|tank|tanque|oil_level/.test(k) && !/range|autonom|consum|cost|price|bat/.test(k) && num(e) !== null; });
+  R.fuel = fuels.filter(function (e) { return e.u === "%"; })[0] || fuels.filter(function (e) { return /^l$|litro|liter|gal/i.test(e.u || ""); })[0] || null;
+  function txt(re, avoid) { return L.filter(function (e) { var k = (e.id + " " + (e.n || "")).toLowerCase(); return re.test(k) && !(avoid && avoid.test(k)); }); }
+  R.lock = L.filter(function (e) { return e.id.indexOf("lock.") === 0; })[0] || txt(/lock|seguro|cerrad|bloque/, /child|niñ|key|llave|charg|carga|time|trunk/)[0] || null;
+  R.doors = txt(/door|puerta/, /lock|seguro/).filter(function (e) { return e.id.indexOf("binary_sensor.") === 0 || /open|abiert|closed|cerrad/i.test(e.s); });
+  R.wins = txt(/window|ventan/).filter(function (e) { return e.id.indexOf("binary_sensor.") === 0 || /open|abiert|closed|cerrad/i.test(e.s); });
+  R.trunk = txt(/trunk|tailgate|boot|cajuela|maleter|hood|cofre/, /lock|unlock/).filter(function (e) { return e.id.indexOf("binary_sensor.") === 0 || /open|abiert|closed|cerrad/i.test(e.s); });
+  R.trk = L.filter(function (e) { return e.id.indexOf("device_tracker.") === 0; })[0] || null;
+  R.ctime = L.filter(function (e) { var k = (e.id + " " + (e.n || "")).toLowerCase(); return /charg|carga|full|lleno/.test(k) && /time|tiempo|remain|rest|minut|hora/.test(k) && num(e) !== null; })[0] || null;
+  R.ext = pick(L, function (e, k) { return (e.dc === "temperature" || /°/.test(e.u || "")) && /exterior|outside|outdoor|ambient|ext/.test(k); });
+  R.upd = txt(/last_update|last_seen|actualiz|update_time|updated/)[0] || null;
+  function id(re) { return L.filter(function (e) { return re.test(e.id); })[0] || null; }
+  R.kwh100 = id(/average_consumption$/); R.eff = id(/_efficiency$/); R.l100 = id(/[^p]_fuel_consumption$/);
+  R.kmBat = id(/mileage_on_battery$/); R.kmFuel = id(/mileage_on_fuel$/);
+  R.svcDays = id(/days_to_service$/); R.svcKm = id(/distance_to_service$/); R.oil = id(/oil_health$/); R.svcH = id(/hours_to_service$/);
+  R.v12 = id(/12v_battery$/); R.v12v = id(/12v_voltage$/);
+  R.cpow = id(/charging_power$/); R.plug = id(/charger_plug$/); R.swChg = id(/^switch\..*_charging$/);
+  R.clima = L.filter(function (e) { return e.id.indexOf("climate.") === 0; })[0] || null;
+  R.find = id(/^button\..*find_car$/); R.refresh = id(/^button\..*refresh_data$/);
+  R.chg = L.filter(function (e) { return /charg|carga|plug|enchuf/.test((e.id + " " + (e.n || "")).toLowerCase()) && !/time|tiempo|power|potencia|current|corriente|volt|limit|target|%/.test((e.id + " " + (e.n || "") + " " + (e.u || "")).toLowerCase()); })[0] || null;
+  return R;
+}
+function psi(e) {
+  var v = num(e); if (v === null) return null; var u = (e.u || "").toLowerCase();
+  if (u === "kpa") v *= 0.145038; else if (u === "bar") v *= 14.5038;
+  return Math.round(v);
+}
+function tiresSVG(R) {
+  function t(e, x, y, a) {
+    var p = e ? psi(e) : null, col = p === null ? "#8fa6d6" : (p < 30 || p > 42) ? "#ffa94d" : "#3ddc97";
+    return '<text x="' + x + '" y="' + y + '" text-anchor="' + a + '" class="tl" style="fill:' + col + '">' + (p === null ? "--" : p) + '</text>';
+  }
+  return '<svg viewBox="0 0 150 78"><rect x="58" y="4" width="34" height="70" rx="12" fill="#2a5fd6" stroke="#9cc4ff" stroke-width="1.2"/>' +
+    '<path d="M62 20 Q75 15 88 20 L86 28 Q75 25 64 28z" fill="#0b1a44"/><text x="75" y="12" text-anchor="middle" class="ts" style="font-size:6px">FRENTE</text>' +
+    '<g fill="#0a0f1f"><rect x="53" y="12" width="6" height="15" rx="2"/><rect x="91" y="12" width="6" height="15" rx="2"/><rect x="53" y="52" width="6" height="15" rx="2"/><rect x="91" y="52" width="6" height="15" rx="2"/></g>' +
+    t(R.fl, 47, 25, "end") + t(R.fr, 103, 25, "start") + t(R.rl, 47, 65, "end") + t(R.rr, 103, 65, "start") + '</svg>';
+}
+/* Vista 360° de la camioneta: 24 cuadros en una sola imagen (4 columnas x 6 filas) */
+var FR = { n: 24, cols: 4, rows: 6, w: 1000, h: 396, i: 3 };
+function frame(i) {
+  FR.i = ((i % FR.n) + FR.n) % FR.n;
+  var el = $("spinImg"), box = $("spin"), bw = box.clientWidth, bh = box.clientHeight - 16;
+  var w = Math.min(bw, bh * FR.w / FR.h), hh = w * FR.h / FR.w;
+  el.style.width = w + "px"; el.style.height = hh + "px"; el.style.top = Math.max(0, (bh - hh) / 2) + "px"; el.style.bottom = "auto";
+  el.style.backgroundPosition = (FR.i % FR.cols) * 100 / (FR.cols - 1) + "% " + Math.floor(FR.i / FR.cols) * 100 / (FR.rows - 1) + "%";
+}
+function vuelta() { var k = 0, t = setInterval(function () { frame(FR.i + 1); if (++k >= FR.n) clearInterval(t); }, 55); }
+(function () {
+  var box = $("spin"), x0 = null, f0 = 0;
+  function down(x) { x0 = x; f0 = FR.i; box.style.cursor = "grabbing"; }
+  function move(x) { if (x0 !== null) frame(f0 - Math.round((x - x0) / 18)); }
+  function up() { x0 = null; box.style.cursor = ""; }
+  box.addEventListener("touchstart", function (e) { down(e.touches[0].clientX); });
+  box.addEventListener("touchmove", function (e) { move(e.touches[0].clientX); e.preventDefault(); });
+  box.addEventListener("touchend", up);
+  box.addEventListener("mousedown", function (e) { down(e.clientX); e.preventDefault(); });
+  window.addEventListener("mousemove", function (e) { move(e.clientX); });
+  window.addEventListener("mouseup", up);
+  window.addEventListener("resize", function () { if (vista === "geely") frame(FR.i); });
+})();
+/* Vista 360° pequeña en Inicio: da una vuelta lenta cada minuto */
+var MI = 3;
+function miniFrame(i) {
+  MI = ((i % FR.n) + FR.n) % FR.n;
+  var el = $("mImg"), box = $("mini"); if (!el || !box) return;
+  var bw = box.clientWidth - 16, bh = box.clientHeight - 150;
+  var w = Math.min(bw, bh * FR.w / FR.h), hh = w * FR.h / FR.w;
+  el.style.width = w + "px"; el.style.height = hh + "px"; el.style.top = (40 + Math.max(0, (bh - hh) / 2)) + "px";
+  el.style.backgroundPosition = (MI % FR.cols) * 100 / (FR.cols - 1) + "% " + Math.floor(MI / FR.cols) * 100 / (FR.rows - 1) + "%";
+}
+function miniVuelta() {
+  if (vista !== "main") return;
+  var k = 0, t = setInterval(function () { miniFrame(MI + 1); if (++k >= FR.n) clearInterval(t); }, 180);
+}
+$("mini").addEventListener("click", function (e) {
+  var t = e.target; while (t && t !== this) { if (t.className === "fq") return; t = t.parentNode; }
+  var b = document.querySelector('.nav button[data-v="geely"]'); if (b) b.click(); });
+window.addEventListener("resize", function () { miniFrame(MI); });
+var vista = "main";
+var GR = null, mapa = null, mCar = null, mHome = null;
+function geely() {
+  if (!P.t || !haBase() || !P.g) { if (vista === "geely") $("gStats").innerHTML = '<div class="stat err" style="grid-column:1/-1">Configura Home Assistant y el ID de la Geely en Ajustes.</div>'; return; }
+  leerGeely().then(function (j) {
+    var R = GR = clasificar(j.e || []);
+    $("gName").textContent = j.name || "Geely";
+    function f(e, d) { var v = num(e); return v === null ? "--" : fmt(v, d || 0); }
+    var b = num(R.bat), pw = num(R.cpow) || 0;
+    var cargando = pw > 0.1 || (R.swChg && R.swChg.s === "on");
+    var conectada = (R.plug && R.plug.s === "on") || cargando;
+    var chgTxt = cargando ? '<span class="up">⚡ cargando' + (pw > 0.1 ? " · " + fmt(pw, 1) + " kW" : "") + '</span>' : (conectada ? "conectada, sin cargar" : "desconectada");
+    var fu = num(R.fuel), fuPct = R.fuel && R.fuel.u === "%";
+    $("gStats").innerHTML =
+      '<div class="stat"><div class="l">Batería</div><div class="v">' + (b === null ? "--" : Math.round(b)) + '<small>%</small></div><div class="bar"><i style="width:' + (b || 0) + '%"></i></div><div class="x">' + chgTxt + '</div></div>' +
+      '<div class="stat"><div class="l">Gasolina</div><div class="v">' + (fu === null ? "--" : Math.round(fu)) + '<small>' + (R.fuel ? (fuPct ? "%" : " " + R.fuel.u) : "%") + '</small></div>' +
+        (fuPct ? '<div class="bar"><i class="fuel" style="width:' + fu + '%"></i></div>' : "") + '</div>' +
+      '<div class="stat"><div class="l">Autonomía</div><div class="v">' + f(R.rngTot || R.rng) + '<small> km total</small></div>' +
+        '<div class="x">⚡ Eléctrica: <b style="color:var(--ink)">' + f(R.rng) + ' km</b></div></div>' +
+      '<div class="stat"><div class="l">Kilometraje</div><div class="v">' + f(R.odo) + '<small> km</small></div></div>' +
+      '<div class="stat"><div class="l">Interior</div><div class="v">' + f(R.tin) + '<small>°C</small></div>' +
+        (R.ext ? '<div class="x">Exterior ' + f(R.ext) + '°C</div>' : "") + '</div>' +
+      '<div class="stat car"><div class="l">Llantas (PSI)</div>' + tiresSVG(R) + '</div>';
+
+    // Estado rápido
+    var ch = [];
+    function abierto(e) { return /^(on|open|abiert|true|unlocked)/i.test(e.s); }
+    if (R.lock) { var unl = R.lock.id.indexOf("binary_sensor.") === 0 ? R.lock.s === "on" : R.lock.s !== "locked"; ch.push(unl ? '<span class="chip bad">🔓 Sin seguro</span>' : '<span class="chip ok">🔒 Con seguro</span>'); }
+    if (R.doors.length) { var od = R.doors.filter(abierto).length; ch.push(od ? '<span class="chip bad">' + od + ' puerta' + (od > 1 ? "s" : "") + ' abierta' + (od > 1 ? "s" : "") + '</span>' : '<span class="chip ok">Puertas cerradas</span>'); }
+    if (R.wins.filter(abierto).length) ch.push('<span class="chip mid">Ventanas abiertas</span>');
+    if (R.trunk.filter(abierto).length) ch.push('<span class="chip bad">Cajuela/cofre abierto</span>');
+    if (R.trk) ch.push('<span class="chip">📍 ' + (R.trk.s === "home" ? "En casa" : R.trk.s === "not_home" ? "Fuera de casa" : R.trk.s) + '</span>');
+    if (R.ctime && num(R.ctime) > 0 && cargando) { var mins = num(R.ctime); ch.push('<span class="chip ok">⚡ Lista en ' + (mins >= 60 ? Math.floor(mins / 60) + " h " : "") + Math.round(mins % 60) + ' min</span>'); }
+    if (R.upd) { var d = new Date(R.upd.s); if (!isNaN(d)) { var m = Math.round((Date.now() - d) / 60e3); ch.push('<span class="chip muted">Actualizado ' + (m < 1 ? "ahora" : m < 60 ? "hace " + m + " min" : m < 1440 ? "hace " + Math.round(m / 60) + " h" : "hace " + Math.round(m / 1440) + " d") + '</span>'); } }
+    $("gChips").innerHTML = ch.join("");
+    // Tarjeta pequeña en Inicio
+    $("mName").textContent = j.name || "Geely";
+    var lk = ch.filter(function (c) { return c.indexOf("seguro") >= 0; })[0] || "";
+    $("mStat").innerHTML = '<span class="chip">🔋 ' + (b === null ? "--" : Math.round(b)) + '%' + (cargando ? " ⚡" : "") + '</span>' +
+      '<span class="chip">⛽ ' + (fu === null ? "--" : Math.round(fu)) + (fuPct ? "%" : "") + '</span>' +
+      '<span class="chip">' + f(R.rngTot || R.rng) + ' km</span>' + lk;
+
+    // Consumo y costo
+    var kwh = num(R.kwh100), lt = num(R.l100), kb = num(R.kmBat), kf = num(R.kmFuel);
+    var cE = kwh !== null ? kwh * P.e : null, cG = lt !== null ? lt * P.p : null;
+    var pctE = kb !== null && kf !== null && kb + kf > 0 ? kb / (kb + kf) * 100 : null;
+    var gastoE = kb !== null && kwh !== null ? kb * kwh / 100 * P.e : null;
+    var hubiera = kb !== null && lt !== null ? kb * lt / 100 * P.p : null;
+    $("pCost").innerHTML =
+      '<div class="cmp"><div><div class="k">⚡ Eléctrico / 100 km</div><div class="n up">$' + (cE === null ? "--" : fmt(cE, 0)) + '</div><div class="k">' + f(R.kwh100, 1) + ' kWh</div></div>' +
+      '<div><div class="k">⛽ Gasolina / 100 km</div><div class="n" style="color:var(--warn)">$' + (cG === null ? "--" : fmt(cG, 0)) + '</div><div class="k">' + f(R.l100, 1) + ' L</div></div></div>' +
+      (pctE !== null ? '<div class="r"><span>Km en eléctrico</span><b>' + fmt(kb, 0) + ' km (' + Math.round(pctE) + '%)</b></div><div class="r"><span>Km en gasolina</span><b>' + fmt(kf, 0) + ' km</b></div>' : "") +
+      (gastoE !== null ? '<div class="r"><span>Gastado en luz (aprox.)</span><b>$' + fmt(gastoE, 0) + '</b></div>' : "") +
+      (gastoE !== null && hubiera !== null && hubiera > gastoE ? '<div class="r"><span>Ahorro vs. gasolina (aprox.)</span><b class="up">$' + fmt(hubiera - gastoE, 0) + '</b></div>' : "") +
+      (R.eff ? '<div class="r"><span>Eficiencia</span><b>' + f(R.eff, 1) + ' km/kWh</b></div>' : "") +
+      '<div class="r muted" style="font-size:12px"><span>Luz $' + P.e + '/kWh · Premium $' + P.p + '/L</span></div>';
+
+    // Servicio
+    var oil = num(R.oil), oilCls = oil === null ? "" : oil < 15 ? "bad" : oil < 30 ? "mid" : "ok";
+    var dias = num(R.svcDays);
+    $("pServ").innerHTML =
+      '<div class="cmp"><div><div class="k">Próximo servicio</div><div class="n' + (dias !== null && dias < 15 ? " bad" : "") + '">' + f(R.svcDays) + ' días</div><div class="k">o ' + f(R.svcKm) + ' km, lo que pase primero</div></div></div>' +
+      '<div class="r"><span>Vida del aceite</span><b class="' + oilCls + '">' + f(R.oil) + '%</b></div>' +
+      (oil !== null ? '<div class="bar" style="margin:0 0 6px"><i class="fuel" style="width:' + oil + '%"></i></div>' : "") +
+      '<div class="r"><span>Horas de motor para servicio</span><b>' + f(R.svcH) + ' h</b></div>' +
+      '<div class="r"><span>Batería 12 V</span><b>' + f(R.v12) + '% · ' + f(R.v12v, 1) + ' V</b></div>';
+
+    // Controles
+    var cOn = R.clima && R.clima.s !== "off" && R.clima.s !== "unavailable";
+    $("aClima").className = cOn ? "on" : ""; $("aClima").textContent = cOn ? "❄️ Clima encendido" : "❄️ Clima";
+    $("aClima").disabled = !R.clima; $("aFind").disabled = !R.find; $("aRef").disabled = !R.refresh;
+    if (panel === "pUbi") mapaGeely();
+  }).catch(function (e) { $("gStats").innerHTML = '<div class="stat err" style="grid-column:1/-1">No se pudo leer la Geely (' + e.message + ').</div>'; });
+}
+/* Mapa (Leaflet + OpenStreetMap), se carga solo al abrir la pestaña Ubicación */
+function cargarLeaflet(cb) {
+  if (window.L && L.map) return cb();
+  var css = document.createElement("link"); css.rel = "stylesheet"; css.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"; document.head.appendChild(css);
+  var s = document.createElement("script"); s.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"; s.onload = cb;
+  s.onerror = function () { $("gMap").innerHTML = '<div class="err" style="padding:12px">No se pudo cargar el mapa.</div>'; };
+  document.head.appendChild(s);
+}
+function mapaGeely() {
+  var t = GR && GR.trk; if (!t || t.lat == null) { $("gMap").innerHTML = '<div class="muted" style="padding:12px">Sin ubicación de la camioneta.</div>'; return; }
+  if (!P.k) { $("gMap").innerHTML = '<div class="muted" style="padding:12px">Falta la llave de TomTom en Ajustes para mostrar el mapa.</div>'; return; }
+  cargarLeaflet(function () {
+    var ll = [t.lat, t.lon];
+    if (!mapa) {
+      mapa = L.map("gMap", { zoomControl: false, attributionControl: true }).setView(ll, 15);
+      L.tileLayer("https://api.tomtom.com/map/1/tile/basic/night/{z}/{x}/{y}.png?tileSize=256&key=" + encodeURIComponent(P.k), { maxZoom: 22, attribution: "© TomTom" }).addTo(mapa);
+      mCar = L.circleMarker(ll, { radius: 10, color: "#fff", weight: 3, fillColor: "#3f8cff", fillOpacity: 1 }).addTo(mapa);
+      var hp = (P.h || "").split(",");
+      if (hp.length === 2) mHome = L.circleMarker([+hp[0], +hp[1]], { radius: 7, color: "#3ddc97", weight: 2, fillColor: "#07102b", fillOpacity: 1 }).addTo(mapa).bindTooltip("Casa");
+    } else { mCar.setLatLng(ll); mapa.setView(ll); }
+    setTimeout(function () { mapa.invalidateSize(); }, 50);
+  });
+}
+var panel = "pUbi";
+(function () {
+  var segs = document.querySelectorAll("#gSeg button");
+  Array.prototype.forEach.call(segs, function (b) {
+    b.addEventListener("click", function () {
+      panel = b.getAttribute("data-p");
+      Array.prototype.forEach.call(segs, function (x) { x.className = x === b ? "act" : ""; });
+      ["pUbi", "pCost", "pServ"].forEach(function (id) { $(id).style.display = id === panel ? "" : "none"; });
+      if (panel === "pUbi") mapaGeely();
+    });
+  });
+  function accion(btn, servicio, datos, pregunta, okTxt) {
+    if (pregunta && !window.confirm(pregunta)) return;
+    var t0 = btn.textContent; btn.disabled = true; btn.textContent = "Enviando…";
+    ha("/api/services/" + servicio, datos).then(function () { btn.textContent = okTxt; }).catch(function () { btn.textContent = "Error"; })
+      .then(function () { setTimeout(function () { btn.disabled = false; btn.textContent = t0; geely(); }, 4000); });
+  }
+  $("aClima").addEventListener("click", function () {
+    if (!GR || !GR.clima) return;
+    var on = GR.clima.s !== "off";
+    accion(this, "climate/" + (on ? "turn_off" : "turn_on"), { entity_id: GR.clima.id }, on ? "¿Apagar el clima de la camioneta?" : "¿Encender el clima de la camioneta?", on ? "Apagando…" : "Encendiendo…");
+  });
+  $("aFind").addEventListener("click", function () {
+    if (!GR || !GR.find) return;
+    accion(this, "button/press", { entity_id: GR.find.id }, "¿Tocar el claxon y prender las luces de la camioneta?", "Listo");
+  });
+  $("aRef").addEventListener("click", function () {
+    if (!GR || !GR.refresh) return;
+    accion(this, "button/press", { entity_id: GR.refresh.id }, null, "Pidiendo datos…");
+  });
+})();
+(function () {
+  var btns = document.querySelectorAll(".nav button[data-v]");
+  Array.prototype.forEach.call(btns, function (b) {
+    b.addEventListener("click", function () {
+      vista = b.getAttribute("data-v");
+      Array.prototype.forEach.call(btns, function (x) { x.className = x === b ? "act" : ""; });
+      Array.prototype.forEach.call(document.querySelectorAll(".vmain"), function (el) { el.style.display = vista === "main" ? "" : "none"; });
+      $("vGeely").style.display = vista === "geely" ? "grid" : "none";
+      $("vTv").style.display = vista === "tv" ? "grid" : "none";
+      $("vRed").style.display = vista === "red" ? "grid" : "none";
+      $("vMus").style.display = vista === "mus" ? "grid" : "none";
+      $("vAg").style.display = vista === "ag" ? "grid" : "none";
+      $("vFam").style.display = vista === "fam" ? "grid" : "none";
+      if (vista === "fam") familia();
+      if (vista === "ag") pintarAgenda();
+      if (vista === "mus") { musica(); if (!MU.cargada) biblioteca("playlist"); }
+      if (vista === "red") red();
+      if (vista === "tv") tv();
+      if (vista === "geely") { geely(); frame(FR.i); setTimeout(vuelta, 300); }
+      if (vista === "main") setTimeout(function () { miniFrame(MI); }, 50);
+    });
+  });
+})();
+
+/* --- Control de la TV (onn / Android TV, integración "Android TV Remote") --- */
+var TV = { r: null, m: null };
+var APPS = [["YouTube", "com.google.android.youtube.tv", "#e62117"], ["Netflix", "com.netflix.ninja", "#b20710"], ["Disney+", "com.disney.disneyplus", "#113ccf"],
+  ["Prime Video", "com.amazon.amazonvideo.livingroom", "#00a8e1"], ["Max", "com.wbd.stream", "#0026e6"], ["Apple TV", "com.apple.atve.androidtv.appletv", "#1c1c1e"]];
+$("tvApps").innerHTML = APPS.map(function (a) { return '<button type="button" class="app" data-app="' + a[1] + '" style="background:' + a[2] + '">' + a[0] + '</button>'; }).join("");
+var TVTPL = "{% set r = states.remote | map(attribute='entity_id') | list %}{% set m = states.media_player | map(attribute='entity_id') | list %}" +
+  "{{ {'r': r, 'm': m} | to_json }}";
+function tv() {
+  if (!P.t || !haBase()) { $("tvApp").textContent = "Configura Home Assistant en Ajustes."; return; }
+  (TV.r ? Promise.resolve() : ha("/api/template", { template: TVTPL }).then(function (t) {
+    var j = typeof t === "string" ? JSON.parse(t) : t;
+    TV.r = j.r.filter(function (e) { return /onn|tv|google/i.test(e); })[0] || j.r[0] || null;
+    if (TV.r) { var obj = TV.r.split(".")[1]; TV.m = j.m.indexOf("media_player." + obj) >= 0 ? "media_player." + obj : (j.m.filter(function (e) { return /onn|tv|google/i.test(e); })[0] || null); }
+  })).then(function () {
+    if (!TV.r) { $("tvApp").textContent = "No encontré la TV. Agrega la integración \"Android TV Remote\" en Home Assistant."; return; }
+    return ha("/api/states/" + (TV.m || TV.r)).then(function (s) {
+      var on = s.state !== "off" && s.state !== "unavailable" && s.state !== "standby";
+      $("tvNp").className = "np" + (on ? " on" : "");
+      $("tvName").textContent = (s.attributes.friendly_name || "TV");
+      $("tvApp").textContent = s.state === "unavailable" ? "Sin conexión" : !on ? "Apagada" : (s.attributes.app_name || s.attributes.media_title || s.attributes.app_id || "Encendida");
+    });
+  }).catch(function (e) { $("tvApp").textContent = "Error al consultar la TV (" + e.message + ")."; });
+}
+function tvCmd(c) { if (TV.r) ha("/api/services/remote/send_command", { entity_id: TV.r, command: c }).catch(function () {}); }
+$("vTv").addEventListener("click", function (e) {
+  var b = e.target; while (b && b !== this && !b.getAttribute("data-k") && !b.getAttribute("data-app") && b.id !== "tvPw") b = b.parentNode;
+  if (!b || b === this) return;
+  if (!TV.r) { $("tvApp").textContent = "No encontré la TV en Home Assistant. Agrega la integración \"Android TV Remote\"."; return; }
+  if (b.id === "tvPw") { ha("/api/services/remote/toggle", { entity_id: TV.r }).then(function () { setTimeout(tv, 1500); }); return; }
+  if (b.getAttribute("data-app")) {
+    var app = b.getAttribute("data-app"), nom = b.textContent;
+    $("tvApp").textContent = "Abriendo " + nom + "…";
+    ha("/api/services/remote/turn_on", { entity_id: TV.r, activity: app })
+      .catch(function () { return TV.m ? ha("/api/services/media_player/play_media", { entity_id: TV.m, media_content_type: "app", media_content_id: app }) : Promise.reject(new Error("sin media_player")); })
+      .catch(function () { return ha("/api/services/remote/turn_on", { entity_id: TV.r, activity: "market://launch?id=" + app }); })
+      .then(function () { setTimeout(tv, 3000); })
+      .catch(function (e) { $("tvApp").textContent = "No se pudo abrir " + nom + " (" + e.message + ")"; });
+    return;
+  }
+  tvCmd(b.getAttribute("data-k"));
+});
+setInterval(function () { if (vista === "tv") tv(); }, 10e3);
+
+/* --- Velocidad de la red (integración Speedtest.net de Home Assistant) --- */
+var SP = { d: null, u: null, p: null, hist: null, probando: 0 };
+var SPTPL = "{% set s = states.sensor | selectattr('entity_id','search','speedtest') | map(attribute='entity_id') | list %}{{ s | to_json }}";
+function red() {
+  if (!P.t || !haBase()) { $("spWhen").textContent = "Configura Home Assistant en Ajustes."; return; }
+  (SP.d ? Promise.resolve() : ha("/api/template", { template: SPTPL }).then(function (t) {
+    var L = typeof t === "string" ? JSON.parse(t) : t;
+    SP.d = L.filter(function (e) { return /download|descarga/.test(e); })[0] || null;
+    SP.u = L.filter(function (e) { return /upload|subida/.test(e); })[0] || null;
+    SP.p = L.filter(function (e) { return /ping|latencia/.test(e); })[0] || null;
+  })).then(function () {
+    if (!SP.d) { $("spWhen").textContent = 'Agrega la integración "Speedtest.net" en Home Assistant.'; return; }
+    return Promise.all([SP.d, SP.u, SP.p].map(function (id) { return id ? ha("/api/states/" + id).catch(function () { return null; }) : null; })).then(function (S) {
+      function v(s) { var n = s ? parseFloat(s.state) : NaN; return isNaN(n) ? "--" : Math.round(n); }
+      $("spD").innerHTML = v(S[0]) + "<small> Mbps</small>"; $("spU").innerHTML = v(S[1]) + "<small> Mbps</small>"; $("spP").innerHTML = v(S[2]) + "<small> ms</small>";
+      if (S[0]) {
+        var m = Math.round((Date.now() - new Date(S[0].last_updated)) / 6e4);
+        $("spWhen").textContent = "Última prueba: " + (m < 1 ? "ahora" : m < 60 ? "hace " + m + " min" : "hace " + Math.round(m / 60) + " h");
+        if (SP.probando && new Date(S[0].last_updated) > SP.probando) { SP.probando = 0; $("spGo").disabled = false; $("spGo").textContent = "Probar ahora"; }
+      }
+      var ini = new Date(Date.now() - 864e5).toISOString();
+      var ids = [SP.d, SP.u].filter(Boolean).join(",");
+      return ha("/api/history/period/" + ini + "?filter_entity_id=" + ids + "&minimal_response&no_attributes").then(function (H) {
+        SP.hist = H; dibujarRed();
+      });
+    });
+  }).catch(function (e) { $("spWhen").textContent = "Error al consultar (" + e.message + ")."; });
+}
+function dibujarRed() {
+  var s = $("spSvg"), W = s.clientWidth, H = s.clientHeight; if (!W || !H || !SP.hist) return;
+  var series = SP.hist.map(function (arr) {
+    var id = arr[0] && arr[0].entity_id;
+    return { col: id === SP.u ? "#3ddc97" : "#4fc1ff", pts: arr.map(function (x) { return [new Date(x.last_changed).getTime(), parseFloat(x.state)]; }).filter(function (q) { return !isNaN(q[1]); }) };
+  });
+  var t1 = Date.now(), t0 = t1 - 864e5, max = 10;
+  series.forEach(function (se) { se.pts.forEach(function (q) { if (q[1] > max) max = q[1]; }); });
+  var paso = Math.ceil(max / 4 / 10) * 10; max = paso * 4;
+  var L = 44, R = 10, T = 10, B = 26, w = W - L - R, hh = H - T - B;
+  function X(t) { return L + (t - t0) / (t1 - t0) * w; } function Y(v) { return T + hh - v / max * hh; }
+  var g = "";
+  for (var k = 0; k <= 4; k++) { var vv = max * k / 4; g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + Y(vv) + '" y2="' + Y(vv) + '" stroke="rgba(143,166,214,.15)"/><text x="' + (L - 6) + '" y="' + (Y(vv) + 4) + '" text-anchor="end" font-size="11" fill="#8fa6d6">' + Math.round(vv) + '</text>'; }
+  for (var hr = 0; hr <= 24; hr += 6) { var tt = t0 + hr * 36e5, d = new Date(tt); g += '<text x="' + X(tt) + '" y="' + (H - 6) + '" text-anchor="' + (hr === 0 ? "start" : hr === 24 ? "end" : "middle") + '" font-size="11" fill="#8fa6d6">' + ("0" + d.getHours()).slice(-2) + ':00</text>'; }
+  series.forEach(function (se) {
+    if (!se.pts.length) return;
+    var dpath = se.pts.map(function (q, i) { return (i ? "L" : "M") + X(Math.max(q[0], t0)).toFixed(1) + " " + Y(q[1]).toFixed(1); }).join(" ");
+    g += '<path d="' + dpath + '" fill="none" stroke="' + se.col + '" stroke-width="2.5" stroke-linejoin="round"/>';
+    se.pts.forEach(function (q) { g += '<circle cx="' + X(Math.max(q[0], t0)).toFixed(1) + '" cy="' + Y(q[1]).toFixed(1) + '" r="3" fill="' + se.col + '"/>'; });
+  });
+  if (!series.some(function (se) { return se.pts.length; })) g += '<text x="' + (W / 2) + '" y="' + (H / 2) + '" text-anchor="middle" font-size="14" fill="#8fa6d6">Aún no hay pruebas en las últimas 24 horas</text>';
+  s.setAttribute("viewBox", "0 0 " + W + " " + H); s.innerHTML = g;
+}
+if (window.ResizeObserver) { var spRO = new ResizeObserver(dibujarRed); spRO.observe($("spSvg")); }
+$("spGo").addEventListener("click", function () {
+  if (!SP.d) { red(); return; }
+  var b = this; b.disabled = true; b.textContent = "Probando… (~1 min)"; SP.probando = new Date();
+  ha("/api/services/homeassistant/update_entity", { entity_id: [SP.d, SP.u, SP.p].filter(Boolean) }).catch(function () {});
+  setTimeout(function () { if (SP.probando) { SP.probando = 0; b.disabled = false; b.textContent = "Probar ahora"; } }, 180e3);
+});
+setInterval(function () { if (vista === "red") red(); }, 15e3);
+
+/* --- Timbre Nest (de batería): foto del evento + video en vivo por WebRTC --- */
+var PUERTA = { cam: null, chime: null, dev: null, ultimo: null, abierta: false, pc: null, ws: null, timer: null };
+var DTPL = "{% set ns = namespace(ev=[], cam=[]) %}" +
+  "{% for s in states.event %}{% set ns.ev = ns.ev + [{'id': s.entity_id, 's': s.state, 'd': device_id(s.entity_id), 'ne': s.attributes.get('nest_event_id'), 'n': s.attributes.get('friendly_name')}] %}{% endfor %}" +
+  "{% for s in states.camera %}{% set ns.cam = ns.cam + [{'id': s.entity_id, 'd': device_id(s.entity_id)}] %}{% endfor %}{{ {'ev': ns.ev, 'cam': ns.cam} | to_json }}";
+function revisarTimbre() {
+  if (!P.t || !haBase()) return;
+  ha("/api/template", { template: DTPL }).then(function (t) {
+    var j = typeof t === "string" ? JSON.parse(t) : t;
+    var ch = j.ev.filter(function (e) { return /chime|timbre|doorbell/i.test(e.id + " " + (e.n || "")); })[0];
+    var c = (ch && j.cam.filter(function (x) { return x.d === ch.d; })[0]) || j.cam.filter(function (x) { return /entrada|puerta|door|nest/i.test(x.id); })[0] || j.cam[0];
+    PUERTA.cam = c ? c.id : null;
+    if (!ch) return;
+    PUERTA.chime = ch; PUERTA.dev = ch.d || (c && c.d);
+    if (PUERTA.ultimo === null) { PUERTA.ultimo = ch.s; return; }            // primera lectura: no avisar
+    if (ch.s !== PUERTA.ultimo && ch.s !== "unknown" && ch.s !== "unavailable") {
+      PUERTA.ultimo = ch.s;
+      if (Date.now() - new Date(ch.s).getTime() < 120e3) abrirPuerta(true);  // tocaron hace menos de 2 min
+    }
+  }).catch(function (e) { PUERTA.err = e.message; });
+}
+function hora(d) { return d.toLocaleTimeString("es-MX", { hour: "numeric", minute: "2-digit" }); }
+function abrirPuerta(porTimbre) {
+  if (window.SS) ssOcultar();
+  PUERTA.abierta = true; tick();
+  $("door").style.display = "flex";
+  $("doorT").textContent = porTimbre ? "🔔 Tocaron el timbre" : "Puerta";
+  $("doorS").textContent = porTimbre ? hora(new Date()) : "";
+  clearTimeout(PUERTA.timer); PUERTA.timer = setTimeout(cerrarPuerta, 120e3);
+  if (porTimbre) mostrarFoto(); else verEnVivo();
+}
+function cerrarPuerta() {
+  PUERTA.abierta = false; clearTimeout(PUERTA.timer); pararVivo();
+  $("door").style.display = "none"; tick();
+}
+function mensajePuerta(t) { $("doorM").innerHTML = '<span class="msg">' + t + '</span>'; }
+function mostrarFoto() {
+  pararVivo();
+  var ch = PUERTA.chime;
+  if (!ch || !ch.ne || !PUERTA.dev) { mensajePuerta("Todavía no hay foto de algún timbrazo. Toca «Ver en vivo»."); return; }
+  mensajePuerta("Cargando foto…");
+  fetch(haBase() + "/api/nest/event_media/" + PUERTA.dev + "/" + ch.ne + "/thumbnail", { headers: { "Authorization": "Bearer " + P.t } })
+    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.blob(); })
+    .then(function (b) { $("doorM").innerHTML = '<img alt="Foto del timbre" src="' + URL.createObjectURL(b) + '">'; })
+    .catch(function () { mensajePuerta("No se pudo cargar la foto. Toca «Ver en vivo»."); });
+}
+function pararVivo() {
+  try { if (PUERTA.pc) PUERTA.pc.close(); } catch (e) {} PUERTA.pc = null;
+  try { if (PUERTA.ws) PUERTA.ws.close(); } catch (e) {} PUERTA.ws = null;
+}
+function verEnVivo() {
+  pararVivo();
+  if (!P.t || !haBase()) { mensajePuerta("Configura Home Assistant en Ajustes."); return; }
+  if (!PUERTA.cam) { mensajePuerta("Buscando la cámara…"); revisarTimbre(); setTimeout(function () { if (PUERTA.cam) verEnVivo(); else mensajePuerta("No encontré la cámara del timbre en Home Assistant" + (PUERTA.err ? " (error " + PUERTA.err + ")" : "") + "."); }, 3000); return; }
+  if (!window.RTCPeerConnection) { mensajePuerta("Este navegador no soporta video en vivo."); return; }
+  mensajePuerta("Despertando la cámara… (unos segundos)");
+  var ws = PUERTA.ws = new WebSocket(haBase().replace(/^http/, "ws") + "/api/websocket"), id = 1, cola = [], sesion = null, pc;
+  function enviar(o) { o.id = ++id; ws.send(JSON.stringify(o)); return o.id; }
+  var idCfg, idOffer;
+  ws.onmessage = function (m) {
+    var d = JSON.parse(m.data);
+    if (d.type === "auth_required") ws.send(JSON.stringify({ type: "auth", access_token: P.t }));
+    else if (d.type === "auth_invalid") mensajePuerta("Token inválido.");
+    else if (d.type === "auth_ok") idCfg = enviar({ type: "camera/webrtc/get_client_config", entity_id: PUERTA.cam });
+    else if (d.type === "result" && d.id === idCfg) iniciarPc(d.success ? d.result : {});
+    else if (d.type === "result" && d.id === idOffer && !d.success) mensajePuerta("La cámara no aceptó la conexión (" + ((d.error && d.error.message) || "error") + ").");
+    else if (d.type === "event" && d.id === idOffer) {
+      var ev = d.event;
+      if (ev.type === "session") { sesion = ev.session_id; cola.forEach(mandarCand); cola = []; }
+      else if (ev.type === "answer") pc.setRemoteDescription({ type: "answer", sdp: ev.answer }).catch(function (e) { mensajePuerta("Error de video: " + e.message); });
+      else if (ev.type === "candidate" && ev.candidate) pc.addIceCandidate(ev.candidate).catch(function () {});
+      else if (ev.type === "error") mensajePuerta("Error de la cámara: " + (ev.message || ev.code));
+    }
+  };
+  ws.onerror = function () { mensajePuerta("No se pudo conectar con Home Assistant."); };
+  function mandarCand(c) { enviar({ type: "camera/webrtc/candidate", entity_id: PUERTA.cam, session_id: sesion, candidate: { candidate: c.candidate, sdpMid: c.sdpMid, sdpMLineIndex: c.sdpMLineIndex } }); }
+  function iniciarPc(cfg) {
+    var conf = (cfg && cfg.configuration) || {};
+    pc = PUERTA.pc = new RTCPeerConnection(conf);
+    pc.addTransceiver("audio", { direction: "recvonly" });
+    pc.addTransceiver("video", { direction: "recvonly" });
+    if (cfg && cfg.dataChannel) pc.createDataChannel(cfg.dataChannel);
+    var stream = new MediaStream();
+    pc.ontrack = function (e) {
+      stream.addTrack(e.track);
+      var v = $("doorM").querySelector("video");
+      if (!v) { $("doorM").innerHTML = '<video autoplay playsinline muted></video>'; v = $("doorM").querySelector("video"); }
+      v.srcObject = stream; var pr = v.play(); if (pr && pr.catch) pr.catch(function () {});
+    };
+    pc.onicecandidate = function (e) { if (!e.candidate) return; if (sesion) mandarCand(e.candidate); else cola.push(e.candidate); };
+    pc.createOffer().then(function (o) { return pc.setLocalDescription(o); }).then(function () {
+      idOffer = enviar({ type: "camera/webrtc/offer", entity_id: PUERTA.cam, offer: pc.localDescription.sdp });
+    }).catch(function (e) { mensajePuerta("Error preparando el video: " + e.message); });
+  }
+}
+$("doorBtn").addEventListener("click", function () { abrirPuerta(false); });
+$("doorX").addEventListener("click", cerrarPuerta);
+$("doorLive").addEventListener("click", verEnVivo);
+$("doorFoto").addEventListener("click", mostrarFoto);
+setTimeout(revisarTimbre, 1500); setInterval(revisarTimbre, 4000);
+
+/* --- Protector de pantalla: fotos del álbum (lista en fotos.json, la genera la tablet) --- */
+var SS = { fotos: [], i: 0, activo: false, inact: 5 * 60e3, cada: 15e3, ultimo: Date.now(), timer: null, capa: 0 };
+var ALB = { lista: [], act: "" };
+function cargarFotos(cb) {
+  fetch("fotos.json?t=" + Date.now(), { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
+    if (!j) return;
+    ALB.lista = j.albumes || [{ nombre: "Principal", fotos: j.fotos || [] }]; ALB.act = j.actualizado || ""; ALB.err = j.errores || [];
+    var ocultos = P.alb || [], f = [];
+    ALB.lista.forEach(function (a) { if (ocultos.indexOf(a.nombre) < 0) f = f.concat(a.fotos || []); });
+    if (!f.length) f = (j.fotos || []).slice();          // si quitaste todos, muestra todos
+    for (var k = f.length - 1; k > 0; k--) { var r = Math.floor(Math.random() * (k + 1)), t = f[k]; f[k] = f[r]; f[r] = t; }  // orden al azar
+    SS.fotos = f; SS.i = 0;
+    if (cb) cb();
+  }).catch(function () {});
+}
+function pintarAlbumes() {
+  if (!ALB.lista.length) { cargarFotos(pintarAlbumes); return; }
+  var ocultos = P.alb || [];
+  $("cAlbs").innerHTML = ALB.lista.map(function (a) {
+    return '<label class="alb"><input type="checkbox" data-a="' + esc(a.nombre) + '"' + (ocultos.indexOf(a.nombre) < 0 ? " checked" : "") + '><span>' + esc(a.nombre) + ' <small>· ' + (a.fotos || []).length + ' fotos</small></span><button class="sec" type="button" data-q="' + esc(a.nombre) + '">Quitar</button></label>';
+  }).join("") + '<div class="note">Actualizado: ' + esc(ALB.act) + (ALB.err && ALB.err.length ? ' · <span class="err">' + esc(ALB.err.join("; ")) + '</span>' : "") + '</div>';
+}
+function albumServicio(srv, datos, msg) {
+  $("cAlbMsg").textContent = msg + " (puede tardar unos segundos)…";
+  ha("/api/services/shell_command/" + srv, datos).then(function () {
+    setTimeout(function () { cargarFotos(function () { pintarAlbumes(); $("cAlbMsg").textContent = "Listo."; }); }, 1500);
+  }).catch(function (e) { $("cAlbMsg").textContent = "No se pudo (" + e.message + "). ¿Ya agregaste los shell_command en Home Assistant?"; });
+}
+$("cAlbs").addEventListener("change", function (e) {
+  var n = e.target.getAttribute && e.target.getAttribute("data-a"); if (n === null || n === undefined) return;
+  var o = (P.alb || []).filter(function (x) { return x !== n; }); if (!e.target.checked) o.push(n);
+  P.alb = o; guardarCfg(); cargarFotos(); $("cAlbMsg").textContent = "Guardado.";
+});
+$("cAlbs").addEventListener("click", function (e) {
+  var b = e.target.closest ? e.target.closest("[data-q]") : null; if (!b) return; e.preventDefault();
+  var n = b.getAttribute("data-q");
+  if (!window.confirm("¿Quitar el álbum «" + n + "» del protector?")) return;
+  albumServicio("album_quitar", { nombre: n }, "Quitando " + n);
+});
+$("cAlbAdd").addEventListener("click", function () {
+  var n = $("cAlbN").value.trim(), u = $("cAlbU").value.trim();
+  if (!n || !/^https:\/\/(photos\.app\.goo\.gl|photos\.google\.com)\//.test(u)) { $("cAlbMsg").textContent = "Escribe un nombre y pega el link compartido del álbum (photos.app.goo.gl/…)."; return; }
+  albumServicio("album_agregar", { nombre: n, url: u }, "Agregando " + n);
+  $("cAlbN").value = ""; $("cAlbU").value = "";
+});
+$("cAlbRef").addEventListener("click", function () { albumServicio("album_actualizar", {}, "Actualizando álbumes"); });
+var BANDA = { salir: null, pend: [], lav: [], fam: [] }, DESPERTO = {};
+function despertar() { if (window.SS && SS.activo) ssOcultar(); SS.ultimo = Date.now(); }
+function banda() {
+  var it = [];
+  if (BANDA.salir) it.push({ t: "🚗 " + BANDA.salir, u: true });
+  (BANDA.lav || []).forEach(function (x) { it.push(x); });
+  var nx = $("nxt").textContent.trim(); if (nx) it.push({ t: "📅 " + nx });
+  (BANDA.pend || []).forEach(function (x) { it.push(x); });
+  (BANDA.fam || []).forEach(function (x) { it.push(x); });
+  $("ssB2").innerHTML = it.slice(0, 5).map(function (x) { return '<span' + (x.u ? ' class="urg"' : "") + '>' + esc(x.t) + '</span>'; }).join("");
+}
+function ssInfo() {
+  banda();
+  var d = new Date();
+  $("ssH").textContent = d.toLocaleTimeString("es-MX", { hour: "2-digit", minute: "2-digit", hour12: false });
+  var t = $("nowTemp").textContent.replace(/°C|\s/g, "");
+  var ds = d.toLocaleDateString("es-MX", { weekday: "long", day: "numeric", month: "long" });
+  $("ssD").textContent = ds.charAt(0).toUpperCase() + ds.slice(1) + (t && t !== "--" ? " · " + t + "°C" : "");
+}
+function ssSiguiente() {
+  if (!SS.activo || !SS.fotos.length) return;
+  var url = SS.fotos[SS.i % SS.fotos.length] + "=w1600-h1200"; SS.i++;
+  var nueva = SS.capa ? $("ssA") : $("ssB"), vieja = SS.capa ? $("ssB") : $("ssA");
+  nueva.onload = function () { nueva.className = "vis"; vieja.className = ""; SS.capa = 1 - SS.capa; };
+  nueva.onerror = function () { setTimeout(ssSiguiente, 1000); };
+  nueva.src = url; ssInfo();
+}
+function ssMostrar() {
+  if (SS.activo || !SS.fotos.length || (window.PUERTA && PUERTA.abierta) || $("cfg").style.display === "block") return;
+  SS.activo = true; $("ss").style.display = "block"; ssSiguiente();
+  clearInterval(SS.timer); SS.timer = setInterval(ssSiguiente, SS.cada);
+}
+function ssOcultar() {
+  SS.ultimo = Date.now(); if (!SS.activo) return;
+  SS.activo = false; clearInterval(SS.timer); $("ss").style.display = "none";
+  $("ssA").className = ""; $("ssB").className = "";
+}
+["touchstart", "mousedown", "keydown"].forEach(function (ev) { document.addEventListener(ev, function () { SS.ultimo = Date.now(); }, true); });
+$("ss").addEventListener("click", ssOcultar); $("ss").addEventListener("touchstart", function (e) { e.preventDefault(); ssOcultar(); });
+setInterval(function () {
+  var quieto = Date.now() - SS.ultimo;
+  if (quieto > 2 * 60e3 && vista !== "main" && $("cfg").style.display !== "block" && !(window.PUERTA && PUERTA.abierta)) {
+    var b = document.querySelector('.nav button[data-v="main"]'); if (b) b.click();
+    if ($("lp")) { $("lp").style.display = "none"; LP.id = null; }
+    SS.ultimo = Date.now() - quieto;   // no reinicia el conteo hacia el protector
+  }
+  if (!SS.activo && quieto > SS.inact) ssMostrar();
+  if (SS.activo) ssInfo();
+}, 10e3);
+cargarFotos(); setInterval(cargarFotos, 60 * 60e3);
+
+/* --- Música: Music Assistant a través de Home Assistant --- */
+var MU = { players: [], sel: null, cfg: null, cargada: false, volT: null };
+var MTPL = "{% set ns = namespace(o=[]) %}{% for e in integration_entities('music_assistant') %}{% if e.startswith('media_player.') %}" +
+  "{% set ns.o = ns.o + [{'id': e, 'n': state_attr(e,'friendly_name'), 's': states(e), 't': state_attr(e,'media_title'), 'a': state_attr(e,'media_artist'), 'al': state_attr(e,'media_album_name'), 'p': state_attr(e,'entity_picture'), 'v': state_attr(e,'volume_level'), 'c': config_entry_id(e)}] %}" +
+  "{% endif %}{% endfor %}{{ ns.o | to_json }}";
+function esc(t) { return String(t == null ? "" : t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+function musica() {
+  if (!P.t || !haBase()) { $("mT").textContent = "Configura Home Assistant en Ajustes."; return; }
+  ha("/api/template", { template: MTPL }).then(function (t) {
+    var L = typeof t === "string" ? JSON.parse(t) : t;
+    if (!L.length) { $("mT").textContent = "Agrega la integración Music Assistant en Home Assistant"; $("mItems").innerHTML = '<div class="muted">Falta conectar Music Assistant con Home Assistant.</div>'; return; }
+    MU.players = L; MU.cfg = L[0].c;
+    var guardado = null; try { guardado = localStorage.getItem("musPlayer"); } catch (e) {}
+    if (!MU.sel || !L.some(function (p) { return p.id === MU.sel; })) {
+      var k = L.filter(function (p) { return p.id === guardado; })[0] || L.filter(function (p) { return /klipsch/i.test(p.n || p.id); })[0] || L[0];
+      MU.sel = k.id;
+    }
+    $("mPls").innerHTML = L.map(function (p) { return '<button type="button" class="pl' + (p.id === MU.sel ? " act" : "") + (p.s === "playing" ? " on" : "") + '" data-p="' + p.id + '">' + esc(p.n || p.id) + '</button>'; }).join("");
+    var s = L.filter(function (p) { return p.id === MU.sel; })[0];
+    var sonando = s.s === "playing" || s.s === "paused";
+    $("mT").textContent = sonando ? (s.t || "Sin título") : "Nada sonando";
+    $("mA").textContent = sonando ? [s.a, s.al].filter(Boolean).join(" · ") : (s.s === "unavailable" ? "Bocina sin conexión" : "Elige algo de la derecha");
+    $("mCov").innerHTML = sonando && s.p ? '<img alt="" src="' + esc(haBase() + s.p) + '">' : '<div class="ph">♪</div>';
+    $("mPP").textContent = s.s === "playing" ? "⏸" : "▶";
+    ssMusica();
+    if (s.v != null && Date.now() - (MU.volT || 0) > 3000) { $("mVol").value = Math.round(s.v * 100); $("mVolV").textContent = Math.round(s.v * 100); }
+  }).catch(function (e) { $("mT").textContent = "Error al consultar (" + e.message + ")"; });
+}
+function servicioResp(dom, srv, datos) {
+  return fetch(haBase() + "/api/services/" + dom + "/" + srv + "?return_response", { method: "POST", headers: { "Authorization": "Bearer " + P.t, "Content-Type": "application/json" }, body: JSON.stringify(datos) })
+    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (j) { return j.service_response || {}; });
+}
+function fila(it) {
+  var img = it.image ? '<img alt="" loading="lazy" src="' + esc(it.image) + '">' : '<span class="ph">♪</span>';
+  var sub = it.artists && it.artists.length ? it.artists.map(function (a) { return a.name; }).join(", ") : (it.owner || "");
+  var tipo = { track: "Canción", album: "Álbum", artist: "Artista", playlist: "Playlist", radio: "Radio" }[it.media_type] || "";
+  return '<button type="button" class="it" data-uri="' + esc(it.uri) + '" data-t="' + esc(it.media_type) + '">' + img + '<div><b>' + esc(it.name) + '</b><small>' + esc([tipo, sub].filter(Boolean).join(" · ")) + '</small></div></button>';
+}
+function biblioteca(tipo) {
+  if (!MU.cfg) { musica(); setTimeout(function () { if (MU.cfg) biblioteca(tipo); }, 1500); return; }
+  $("mItems").innerHTML = '<div class="muted">Cargando…</div>';
+  var d = { config_entry_id: MU.cfg, media_type: tipo, limit: 60, order_by: tipo === "track" ? "timestamp_added_desc" : "name" };
+  if (tipo === "track") d.favorite = true;
+  servicioResp("music_assistant", "get_library", d).then(function (r) {
+    MU.cargada = true;
+    var L = r.items || [];
+    $("mItems").innerHTML = L.length ? L.map(fila).join("") : '<div class="muted">No hay nada aquí todavía. Revisa que TIDAL o Apple Music estén conectados en Music Assistant.</div>';
+  }).catch(function (e) { $("mItems").innerHTML = '<div class="err">No se pudo cargar (' + e.message + ').</div>'; });
+}
+function buscar(q) {
+  if (!q || !MU.cfg) return;
+  $("mItems").innerHTML = '<div class="muted">Buscando…</div>';
+  servicioResp("music_assistant", "search", { config_entry_id: MU.cfg, name: q, limit: 8 }).then(function (r) {
+    var sec = [["tracks", "Canciones"], ["artists", "Artistas"], ["albums", "Álbumes"], ["playlists", "Playlists"]];
+    var html = sec.map(function (s) { var L = r[s[0]] || []; return L.length ? '<div class="sec">' + s[1] + '</div>' + L.map(fila).join("") : ""; }).join("");
+    $("mItems").innerHTML = html || '<div class="muted">Sin resultados.</div>';
+  }).catch(function (e) { $("mItems").innerHTML = '<div class="err">Error al buscar (' + e.message + ').</div>'; });
+}
+function cmdMus(srv, extra) { var d = extra || {}; d.entity_id = MU.sel; return ha("/api/services/media_player/" + srv, d).then(function () { setTimeout(musica, 700); }); }
+$("mPls").addEventListener("click", function (e) { var b = e.target.closest ? e.target.closest("[data-p]") : null; if (!b) return; MU.sel = b.getAttribute("data-p"); try { localStorage.setItem("musPlayer", MU.sel); } catch (x) {} musica(); });
+$("mPP").addEventListener("click", function () { cmdMus("media_play_pause"); });
+$("mPrev").addEventListener("click", function () { cmdMus("media_previous_track"); });
+$("mNext").addEventListener("click", function () { cmdMus("media_next_track"); });
+$("mVol").addEventListener("input", function () { MU.volT = Date.now(); $("mVolV").textContent = this.value; });
+$("mVol").addEventListener("change", function () { MU.volT = Date.now(); cmdMus("volume_set", { volume_level: this.value / 100 }); });
+$("mForm").addEventListener("submit", function (e) { e.preventDefault(); $("mQ").blur(); buscar($("mQ").value.trim()); });
+Array.prototype.forEach.call(document.querySelectorAll("#vMus .lib .pls .pl"), function (b, i, all) {
+  b.addEventListener("click", function () { Array.prototype.forEach.call(all, function (x) { x.className = "pl" + (x === b ? " act" : ""); }); biblioteca(b.getAttribute("data-l")); });
+});
+$("mItems").addEventListener("click", function (e) {
+  var b = e.target.closest ? e.target.closest("[data-uri]") : null; if (!b || !MU.sel) return;
+  b.style.opacity = .5;
+  ha("/api/services/music_assistant/play_media", { entity_id: MU.sel, media_id: b.getAttribute("data-uri"), media_type: b.getAttribute("data-t"), enqueue: "replace" })
+    .then(function () { setTimeout(musica, 1500); }).catch(function () {}).then(function () { b.style.opacity = 1; });
+});
+setInterval(function () { if (vista === "mus" || (window.SS && SS.activo)) musica(); }, 5000);
+/* Reproductor en el protector de pantalla: aparece cuando alguna bocina está sonando */
+var SSM = { id: null, firma: "" };
+function ssMusica() {
+  var L = MU.players || [], p = L.filter(function (x) { return x.id === MU.sel && x.s === "playing"; })[0] || L.filter(function (x) { return x.s === "playing"; })[0]
+    || L.filter(function (x) { return x.id === SSM.id && x.s === "paused"; })[0];
+  if (!p) { $("ssM").style.display = "none"; SSM.id = null; return; }
+  SSM.id = p.id;
+  var firma = [p.id, p.s, p.t, p.a, p.p].join("|");
+  if (firma === SSM.firma && $("ssM").style.display === "flex") return;
+  SSM.firma = firma;
+  $("ssM").innerHTML = (p.p ? '<img alt="" src="' + esc(haBase() + p.p) + '">' : '<span class="ph">♪</span>') +
+    '<div class="tx"><b>' + esc(p.t || "Sin título") + '</b><span>' + esc([p.a, p.al].filter(Boolean).join(" · ")) + '</span><small>🔊 ' + esc(p.n || p.id) + '</small>' +
+    '<div class="bt"><button type="button" data-c="media_previous_track" aria-label="Anterior">⏮</button><button type="button" class="pp" data-c="media_play_pause" aria-label="Reproducir o pausar">' + (p.s === "playing" ? "⏸" : "▶") + '</button><button type="button" data-c="media_next_track" aria-label="Siguiente">⏭</button></div></div>';
+  $("ssM").style.display = "flex";
+}
+["touchstart", "mousedown", "click"].forEach(function (ev) {
+  $("ssM").addEventListener(ev, function (e) {
+    e.stopPropagation();
+    if (ev !== "click") return;
+    var b = e.target.closest ? e.target.closest("[data-c]") : null; if (!b || !SSM.id) return;
+    ha("/api/services/media_player/" + b.getAttribute("data-c"), { entity_id: SSM.id }).then(function () { setTimeout(musica, 800); });
+  });
+});
+/* Búsqueda por voz: reconocimiento del navegador si está disponible (requiere https);
+   si no, se usa el dictado del teclado del iPad y se busca solo al terminar de dictar. */
+(function () {
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition, rec = null, t = null, ultimo = "";
+  function auto() {
+    clearTimeout(t);
+    t = setTimeout(function () { var q = $("mQ").value.trim(); if (q.length >= 3 && q !== ultimo) { ultimo = q; buscar(q); } }, 1300);
+  }
+  $("mQ").addEventListener("input", auto);
+  $("mMic").addEventListener("click", function () {
+    var b = this;
+    if (SR && window.isSecureContext) {
+      if (rec) { rec.stop(); return; }
+      rec = new SR(); rec.lang = "es-MX"; rec.interimResults = true; rec.maxAlternatives = 1;
+      b.className = "mic rec"; $("mQ").value = ""; $("mQ").placeholder = "Escuchando…";
+      rec.onresult = function (e) {
+        var txt = ""; for (var i = 0; i < e.results.length; i++) txt += e.results[i][0].transcript;
+        $("mQ").value = txt;
+        if (e.results[e.results.length - 1].isFinal) { ultimo = txt.trim(); buscar(ultimo); }
+      };
+      rec.onerror = function () { $("mHint").style.display = "block"; $("mQ").focus(); };
+      rec.onend = function () { rec = null; b.className = "mic"; $("mQ").placeholder = "Buscar canción, artista, álbum o playlist"; };
+      try { rec.start(); } catch (e) { rec = null; b.className = "mic"; }
+    } else {
+      $("mHint").style.display = "block"; $("mQ").value = ""; $("mQ").focus();
+      setTimeout(function () { $("mHint").style.display = "none"; }, 12000);
+    }
+  });
+})();
+
+/* --- Pendientes: basura, CFE (bimestral), agua y gas (día 1) --- */
+var BASURA = [2, 4, 6];   // martes, jueves, sábado
+function dia0(d) { var x = new Date(d); x.setHours(0, 0, 0, 0); return x; }
+function fechaISO(s) { var m = /(\d+)-(\d+)-(\d+)/.exec(s || ""); return m ? new Date(+m[1], m[2] - 1, +m[3]) : null; }
+function iso(d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+function masMeses(d, n) { var x = new Date(d); var dd = x.getDate(); x.setDate(1); x.setMonth(x.getMonth() + n); x.setDate(Math.min(dd, new Date(x.getFullYear(), x.getMonth() + 1, 0).getDate())); return x; }
+function cuando(n) { return n === 0 ? "hoy" : n === 1 ? "mañana" : n < 7 ? "en " + n + " días (" + DIAS[(new Date().getDay() + n) % 7] + ")" : "en " + n + " días"; }
+function pagado(clave) { try { return localStorage.getItem("pag_" + clave) === "1"; } catch (e) { return false; } }
+function proxCfe() {
+  var hoy = dia0(new Date()), f = fechaISO(P.cfe) || new Date(2026, 10, 21);
+  while (f < hoy && pagado("cfe_" + iso(f))) f = masMeses(f, 2);      // si ya se pagó, pasa al siguiente bimestre
+  while (masMeses(f, 2) <= hoy) f = masMeses(f, 2);                    // por si quedó muy atrás
+  return f;
+}
+function pendientes() {
+  var hoy = dia0(new Date()), h = new Date().getHours(), L = [];
+  // Basura
+  var nb = 0; while (BASURA.indexOf((hoy.getDay() + nb) % 7) < 0) nb++;
+  var tb = nb === 0 ? (h < 12 ? "¡hoy! sácala" : "próx. " + (function () { var k = 1; while (BASURA.indexOf((hoy.getDay() + k) % 7) < 0) k++; return DIAS[(hoy.getDay() + k) % 7]; })())
+         : nb === 1 ? "mañana" : "próx. " + DIAS[(hoy.getDay() + nb) % 7];
+  L.push({ ic: "🗑️", t: "Basura", s: tb, c: nb === 0 ? (h < 12 ? "hoy" : "") : nb === 1 ? "pronto" : "" });
+  // CFE
+  var fc = proxCfe(), nc = Math.round((fc - hoy) / 864e5), kc = "cfe_" + iso(fc), pc = pagado(kc);
+  L.push({ ic: "⚡", t: "Luz CFE", s: pc ? "pagado ✓" : nc < 0 ? "vencido · " + fc.getDate() + " " + MESES[fc.getMonth()] : nc === 0 ? "vence hoy" : fc.getDate() + " " + MESES[fc.getMonth()] + " · " + nc + " d", c: pc ? "ok" : nc <= 2 ? "hoy" : nc <= 7 ? "pronto" : "", k: kc });
+  // Agua (día 11) y gas (día 1)
+  [["💧", "Agua", "agua", 11], ["🔥", "Gas", "gas", 1]].forEach(function (x) {
+    var dd = x[3], esteMes = new Date(hoy.getFullYear(), hoy.getMonth(), dd);
+    var vence = hoy <= esteMes ? esteMes : new Date(hoy.getFullYear(), hoy.getMonth() + 1, dd);
+    var n = Math.round((vence - hoy) / 864e5);
+    var atraso = Math.round((hoy - esteMes) / 864e5);                 // días desde el vencimiento de este mes
+    var kEste = x[2] + "_" + iso(esteMes), kProx = x[2] + "_" + iso(vence);
+    var pendiente = atraso > 0 && atraso <= 9 && !pagado(kEste);
+    var pg = pagado(kProx) || (atraso > 0 && pagado(kEste) && atraso <= 9);
+    var fecha = dd + " " + MESES[vence.getMonth()];
+    L.push({ ic: x[0], t: x[1],
+      s: pendiente ? "pendiente (día " + dd + ")" : pg ? "pagado ✓" : n === 0 ? "vence hoy" : n === 1 ? "mañana" : fecha + " · " + n + " d",
+      c: pendiente || (n === 0 && !pg) ? "hoy" : pg ? "ok" : n <= 3 ? "pronto" : "",
+      k: pendiente || (atraso > 0 && atraso <= 9) ? kEste : kProx });
+  });
+  BANDA.pend = L.filter(function (r) { return r.c === "hoy" || r.c === "pronto"; }).map(function (r) { return { t: r.ic + " " + r.t + " · " + r.s, u: r.c === "hoy" }; });
+  $("rec").innerHTML = L.map(function (r) {
+    return '<button type="button" class="ri ' + r.c + '"' + (r.k ? ' data-k="' + r.k + '"' : "") + '><span class="ic">' + r.ic + '</span><div><b>' + r.t + '</b><small>' + r.s + '</small></div></button>';
+  }).join("");
+}
+var MESES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+$("rec").addEventListener("click", function (e) {
+  var b = e.target.closest ? e.target.closest("[data-k]") : null; if (!b) return;
+  var k = "pag_" + b.getAttribute("data-k");
+  try { if (localStorage.getItem(k) === "1") localStorage.removeItem(k); else localStorage.setItem(k, "1"); } catch (x) {}
+  pendientes();
+});
+pendientes(); setInterval(pendientes, 10 * 60e3);
+
+/* --- Agenda: calendarios de Google a través de Home Assistant --- */
+var AG = { cals: [], ev: [], t: 0 }, AGCOL = ["#4fc1ff", "#ff8fb1", "#3ddc97", "#f7e463", "#c77dff", "#ffa94d"];
+var DSEM = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+function agendaCargar() {
+  if (!P.t || !haBase()) return;
+  ha("/api/calendars").then(function (cals) {
+    AG.cals = (cals || []).filter(function (c) { return !/feriad|holiday|festiv|cumpleaños de|birthdays|numero de semana|week numbers/i.test(c.name || c.entity_id); });
+    var ini = dia0(new Date()), fin = new Date(ini.getTime() + 8 * 864e5);
+    return Promise.all(AG.cals.map(function (c, i) {
+      return ha("/api/calendars/" + c.entity_id + "?start=" + encodeURIComponent(ini.toISOString()) + "&end=" + encodeURIComponent(fin.toISOString()))
+        .then(function (L) { return (L || []).map(function (e) { return { cal: c.name || c.entity_id, col: AGCOL[i % AGCOL.length], t: e.summary || "(sin título)", lugar: e.location || "", todo: !e.start.dateTime, ini: e.start.dateTime ? new Date(e.start.dateTime) : fechaISO(e.start.date), fin: e.end && e.end.dateTime ? new Date(e.end.dateTime) : null }; }); })
+        .catch(function () { return []; });
+    }));
+  }).then(function (grupos) {
+    if (!grupos) return;
+    AG.ev = [].concat.apply([], grupos).sort(function (a, b) { return a.ini - b.ini || (a.todo ? -1 : 1); });
+    AG.t = Date.now(); pintarAgenda(); proximo();
+  }).catch(function (e) { $("agList").innerHTML = '<div class="err">No se pudo leer la agenda (' + e.message + '). ¿Ya agregaste Google Calendar en Home Assistant?</div>'; });
+}
+function hm12(d) { return d.toLocaleTimeString("es-MX", { hour: "numeric", minute: "2-digit", hour12: true }).replace(/\s?a\.?\s?m\.?/i, " am").replace(/\s?p\.?\s?m\.?/i, " pm"); }
+function proximo() {
+  var ahora = new Date(), hoy = dia0(ahora);
+  var e = AG.ev.filter(function (x) { return x.todo ? false : (x.fin || x.ini) > ahora && dia0(x.ini).getTime() <= hoy.getTime() + 864e5; })[0];
+  $("nxt").innerHTML = e ? '<i style="background:' + e.col + '"></i>' + (dia0(e.ini).getTime() === hoy.getTime() ? "" : "Mañana ") + (e.ini <= ahora ? "Ahora" : hm12(e.ini)) + ' · <b>' + esc(e.t) + '</b>' : "";
+}
+function pintarAgenda() {
+  if (!AG.t) { agendaCargar(); return; }
+  $("agL").innerHTML = AG.cals.map(function (c, i) { return '<span><i style="background:' + AGCOL[i % AGCOL.length] + '"></i>' + esc(c.name || c.entity_id) + '</span>'; }).join("");
+  $("agU").textContent = "Actualizado " + hm12(new Date(AG.t));
+  var hoy = dia0(new Date()), ahora = new Date(), html = "";
+  for (var d = 0; d < 7; d++) {
+    var dia = new Date(hoy.getTime() + d * 864e5), sig = new Date(dia.getTime() + 864e5);
+    var L = AG.ev.filter(function (e) { return e.todo ? (e.ini <= dia && (!e.fin || true) && dia0(e.ini).getTime() === dia.getTime()) : e.ini >= dia && e.ini < sig; });
+    if (!L.length && d > 1) continue;
+    html += '<div class="agd' + (d === 0 ? " hoy" : "") + '"><h3>' + (d === 0 ? "Hoy" : d === 1 ? "Mañana" : DSEM[dia.getDay()].charAt(0).toUpperCase() + DSEM[dia.getDay()].slice(1)) + '<small>' + dia.getDate() + " " + MESES[dia.getMonth()] + '</small></h3><div>' +
+      (L.length ? L.map(function (e) {
+        return '<div class="ev' + (!e.todo && (e.fin || e.ini) < ahora ? " pas" : "") + '" style="border-color:' + e.col + '"><span class="hr">' + (e.todo ? "Todo el día" : hm12(e.ini)) + '</span><div><b>' + esc(e.t) + '</b><small>' + esc([e.cal, e.lugar].filter(Boolean).join(" · ")) + '</small></div></div>';
+      }).join("") : '<div class="muted" style="padding:6px 0">Sin eventos</div>') + '</div></div>';
+  }
+  $("agList").innerHTML = html || '<div class="muted">No hay eventos esta semana.</div>';
+}
+setTimeout(agendaCargar, 2500); setInterval(agendaCargar, 10 * 60e3); setInterval(proximo, 60e3);
+
+/* --- Familia: personas de Home Assistant (app de HA o Google Maps) --- */
+var FAM = { L: [], mapa: null, mk: {}, casa: null, tt: {} }, FCOL = ["#4fc1ff", "#ff8fb1", "#3ddc97", "#f7e463", "#c77dff", "#ffa94d"];
+var FTPL = "{% set ns = namespace(o=[]) %}{% for p in states.person %}{% set src = p.attributes.get('source') %}" +
+  "{% set bat = state_attr(src,'battery_level') if src else none %}" +
+  "{% if bat is none and src and device_id(src) %}{% for e in device_entities(device_id(src)) %}{% if 'battery_level' in e and bat is none %}{% set bat = states(e) %}{% endif %}{% endfor %}{% endif %}" +
+  "{% set ns.o = ns.o + [{'id': p.entity_id, 'n': p.name, 's': p.state, 'lat': p.attributes.get('latitude'), 'lon': p.attributes.get('longitude'), 'pic': p.attributes.get('entity_picture'), 'bat': bat, 'u': (states[src].last_updated.isoformat() if src and states[src] else p.last_updated.isoformat())}] %}" +
+  "{% endfor %}{{ ns.o | to_json }}";
+function distKm(a, b) { var R = 6371, r = Math.PI / 180, dl = (b[0] - a[0]) * r, dn = (b[1] - a[1]) * r; var x = Math.sin(dl / 2) * Math.sin(dl / 2) + Math.cos(a[0] * r) * Math.cos(b[0] * r) * Math.sin(dn / 2) * Math.sin(dn / 2); return 2 * R * Math.asin(Math.sqrt(x)); }
+function haceT(iso) { var m = Math.round((Date.now() - new Date(iso)) / 6e4); return m < 1 ? "ahora" : m < 60 ? "hace " + m + " min" : m < 1440 ? "hace " + Math.round(m / 60) + " h" : "hace " + Math.round(m / 1440) + " d"; }
+function zonaTxt(s) { return s === "home" ? "🏠 En casa" : s === "not_home" ? "Fuera de casa" : s === "unknown" || s === "unavailable" ? "Sin ubicación" : "📍 " + s; }
+function familia() {
+  if (!P.t || !haBase()) { $("fams").innerHTML = '<div class="muted">Configura Home Assistant en Ajustes.</div>'; return; }
+  ha("/api/template", { template: FTPL }).then(function (t) {
+    var L = typeof t === "string" ? JSON.parse(t) : t;
+    FAM.L = L; var hp = (P.h || "").split(","); FAM.casa = hp.length === 2 ? [+hp[0], +hp[1]] : null;
+    if (!L.length) { $("fams").innerHTML = '<div class="muted">No hay personas en Home Assistant todavía.</div>'; return; }
+    $("famU").textContent = "Actualizado " + hm12(new Date());
+    $("fams").innerHTML = L.map(function (p, i) {
+      var col = FCOL[i % FCOL.length], ini = (p.n || "?").trim().charAt(0).toUpperCase();
+      var av = p.pic ? 'style="border-color:' + col + ';background-image:url(\'' + esc(haBase() + p.pic) + '\')"' : 'style="border-color:' + col + ';background-color:' + col + '"';
+      var extra = "";
+      if (p.s !== "home" && p.lat != null && FAM.casa) {
+        var km = distKm(FAM.casa, [p.lat, p.lon]), tt = FAM.tt[p.id];
+        extra = km < 1 ? "cerca de casa" : km.toFixed(km < 10 ? 1 : 0) + " km de casa" + (tt != null ? " · " + tt + " min en auto" : "");
+      }
+      var b = parseFloat(p.bat), bt = isNaN(b) ? "" : (b <= 20 ? '<span class="down">🔋 ' + Math.round(b) + '%</span>' : "🔋 " + Math.round(b) + "%");
+      return '<button type="button" class="fp" data-i="' + i + '"><span class="av" ' + av + '>' + (p.pic ? "" : ini) + '</span><div><b>' + esc(p.n) + '</b><span class="z">' + esc(zonaTxt(p.s)) + '</span><small>' + esc([extra, haceT(p.u)].filter(Boolean).join(" · ")) + '</small></div><span class="bt">' + bt + '</span></button>';
+    }).join("");
+    if (vista === "fam") mapaFamilia(); tiemposCasa();
+    BANDA.fam = L.filter(function (p) { return p.s !== "home" && FAM.tt[p.id] != null; }).map(function (p) { return { t: "🚗 " + p.n + " · a " + FAM.tt[p.id] + " min de casa" }; });
+  }).catch(function (e) { $("fams").innerHTML = '<div class="err">Error al consultar (' + e.message + ').</div>'; });
+}
+function tiemposCasa() {
+  if (!P.k || !FAM.casa) return;
+  FAM.L.forEach(function (p) {
+    if (p.s === "home" || p.lat == null || distKm(FAM.casa, [p.lat, p.lon]) < 1) { delete FAM.tt[p.id]; return; }
+    if (FAM.tt["_" + p.id] && Date.now() - FAM.tt["_" + p.id] < 10 * 60e3) return;
+    FAM.tt["_" + p.id] = Date.now();
+    getJSON("https://api.tomtom.com/routing/1/calculateRoute/" + p.lat + "," + p.lon + ":" + FAM.casa.join(",") + "/json?key=" + encodeURIComponent(P.k) + "&traffic=true")
+      .then(function (j) { FAM.tt[p.id] = Math.round(j.routes[0].summary.travelTimeInSeconds / 60); if (vista === "fam") familia(); }).catch(function () {});
+  });
+}
+function mapaFamilia() {
+  if (!P.k) { $("famMap").innerHTML = '<div class="muted" style="padding:12px">Falta la llave de TomTom en Ajustes para el mapa.</div>'; return; }
+  cargarLeaflet(function () {
+    if (!FAM.mapa) {
+      FAM.mapa = L.map("famMap", { zoomControl: false }).setView(FAM.casa || [25.68, -100.31], 12);
+      L.tileLayer("https://api.tomtom.com/map/1/tile/basic/night/{z}/{x}/{y}.png?tileSize=256&key=" + encodeURIComponent(P.k), { maxZoom: 22, attribution: "© TomTom" }).addTo(FAM.mapa);
+      if (FAM.casa) L.marker(FAM.casa, { icon: L.divIcon({ className: "", html: '<div class="pin" style="border-color:#3ddc97;background:#07102b;color:#3ddc97">⌂</div>', iconSize: [40, 40], iconAnchor: [20, 20] }) }).addTo(FAM.mapa);
+    }
+    var pts = FAM.casa ? [FAM.casa] : [];
+    FAM.L.forEach(function (p, i) {
+      if (p.lat == null) return;
+      var col = FCOL[i % FCOL.length], ll = [p.lat, p.lon]; pts.push(ll);
+      var html = '<div class="pin" style="border-color:' + col + ';' + (p.pic ? "background-image:url(\'" + esc(haBase() + p.pic) + "\')" : "background:" + col) + '">' + (p.pic ? "" : esc((p.n || "?").charAt(0).toUpperCase())) + '</div>';
+      var ic = L.divIcon({ className: "", html: html, iconSize: [40, 40], iconAnchor: [20, 20] });
+      if (FAM.mk[p.id]) { FAM.mk[p.id].setLatLng(ll); FAM.mk[p.id].setIcon(ic); } else FAM.mk[p.id] = L.marker(ll, { icon: ic }).addTo(FAM.mapa).bindTooltip(p.n);
+    });
+    setTimeout(function () { FAM.mapa.invalidateSize(); if (!FAM.ajustado && pts.length > 1) { FAM.mapa.fitBounds(pts, { padding: [40, 40], maxZoom: 15 }); FAM.ajustado = true; } }, 60);
+  });
+}
+$("fams").addEventListener("click", function (e) {
+  var b = e.target.closest ? e.target.closest("[data-i]") : null; if (!b || !FAM.mapa) return;
+  var p = FAM.L[+b.getAttribute("data-i")]; if (p && p.lat != null) FAM.mapa.setView([p.lat, p.lon], 15);
+});
+setInterval(function () { if (vista === "fam" || (window.SS && SS.activo)) familia(); }, 30e3);
+setInterval(function () { if (vista !== "fam") familia(); }, 3 * 60e3);
+
+/* --- Lavadora y secadora Samsung (SmartThings): aviso flotante mientras trabajan y al terminar --- */
+var LAV = { prev: {}, fin: {} };
+try { LAV.fin = JSON.parse(localStorage.getItem("lavFin") || "{}"); } catch (e) {}
+var LTPL = "{% set ns = namespace(o=[]) %}{% for e in integration_entities('smartthings') %}" +
+  "{% if e.startswith('sensor.') and ('machine_state' in e or 'job_state' in e or 'completion_time' in e or 'operating_state' in e) %}" +
+  "{% set d = device_id(e) %}{% set ns.o = ns.o + [{'id': e, 'd': d, 'dn': (device_attr(d,'name_by_user') or device_attr(d,'name')) if d else e, 's': states(e)}] %}" +
+  "{% endif %}{% endfor %}{{ ns.o | to_json }}";
+var ETAPA = { wash: "lavando", rinse: "enjuagando", spin: "centrifugando", drying: "secando", dry: "secando", cooling: "enfriando", weight_sensing: "pesando la ropa", pre_wash: "prelavado", soaking: "remojando", wrinkle_prevent: "antiarrugas", delay_wash: "inicio programado", air_wash: "aireando", finish: "terminando", none: "" };
+function lavadoras() {
+  if (!P.t || !haBase()) return;
+  ha("/api/template", { template: LTPL }).then(function (t) {
+    var L = typeof t === "string" ? JSON.parse(t) : t, D = {};
+    L.forEach(function (x) {
+      var d = D[x.d] || (D[x.d] = { n: x.dn });
+      if (/machine_state|operating_state/.test(x.id)) d.m = x.s; else if (/job_state/.test(x.id)) d.j = x.s; else if (/completion_time/.test(x.id)) d.c = x.s;
+    });
+    var html = "";
+    Object.keys(D).forEach(function (k) {
+      var d = D[k], seca = /seca|dryer|dry/i.test(d.n), ic = seca ? "♨️" : "🧺", nom = seca ? "Secadora" : "Lavadora";
+      var corre = d.m === "run" || d.m === "running";
+      if (LAV.prev[k] === true && !corre && d.m && d.m !== "unavailable") { despertar(); LAV.fin[k] = Date.now(); try { localStorage.setItem("lavFin", JSON.stringify(LAV.fin)); } catch (e) {} }
+      LAV.prev[k] = corre;
+      if (corre) {
+        delete LAV.fin[k];
+        var fin = d.c && d.c !== "unknown" ? new Date(d.c) : null, min = fin ? Math.max(0, Math.round((fin - Date.now()) / 6e4)) : null;
+        var etapa = ETAPA[(d.j || "").toLowerCase()] || "";
+        html += '<div class="lv"><span class="ic">' + ic + '</span><div><b>' + nom + (etapa ? " · " + etapa : "") + '</b><small>' + (min != null ? (min ? "termina " + hm12(fin) + " · " + min + " min" : "terminando…") : "en marcha") + '</small></div></div>';
+      } else if (LAV.fin[k] && Date.now() - LAV.fin[k] < 6 * 3600e3) {
+        html += '<button type="button" class="lv fin" data-k="' + k + '"><span class="ic">✅</span><div><b>¡' + nom + ' terminó!</b><small>' + hm12(new Date(LAV.fin[k])) + ' · toca para quitar</small></div></button>';
+      }
+    });
+    $("lav").innerHTML = html;
+    BANDA.lav = Array.prototype.map.call($("lav").querySelectorAll(".lv"), function (n) { return { t: n.querySelector(".ic").textContent + " " + n.querySelector("b").textContent + " · " + n.querySelector("small").textContent.replace(" · toca para quitar", ""), u: n.className.indexOf("fin") >= 0 }; });
+  }).catch(function () {});
+}
+$("lav").addEventListener("click", function (e) {
+  var b = e.target.closest ? e.target.closest("[data-k]") : null; if (!b) return;
+  delete LAV.fin[b.getAttribute("data-k")]; try { localStorage.setItem("lavFin", JSON.stringify(LAV.fin)); } catch (x) {} lavadoras();
+});
+setTimeout(lavadoras, 3000); setInterval(lavadoras, 30e3);
+
+/* --- Deslizar hacia abajo (desde la parte de arriba) para recargar el tablero --- */
+(function () {
+  var y0 = null, dy = 0, UMBRAL = 110;
+  function recargar() {
+    $("ptr").textContent = "Recargando…";
+    var q = "?v=" + Date.now();                                   // evita la caché de Home Assistant
+    location.replace(location.pathname + q + location.hash);
+  }
+  document.addEventListener("touchstart", function (e) {
+    var t = e.touches[0];
+    if (e.touches.length !== 1 || t.clientY > 140 || (window.SS && SS.activo) || $("cfg").style.display === "block") { y0 = null; return; }
+    y0 = t.clientY; dy = 0;
+  }, { passive: true });
+  document.addEventListener("touchmove", function (e) {
+    if (y0 === null) return;
+    dy = e.touches[0].clientY - y0;
+    if (dy <= 0) { $("ptr").style.transform = "translate(-50%,-60px)"; return; }
+    var d = Math.min(dy, UMBRAL + 30);
+    $("ptr").style.transform = "translate(-50%," + (d / 1.4 - 40) + "px)";
+    $("ptr").className = "ptr" + (dy > UMBRAL ? " listo" : "");
+    $("ptr").textContent = dy > UMBRAL ? "↻ Suelta para recargar" : "↓ Desliza para recargar";
+  }, { passive: true });
+  document.addEventListener("touchend", function () {
+    if (y0 === null) return;
+    if (dy > UMBRAL) recargar(); else { $("ptr").style.transform = "translate(-50%,-60px)"; $("ptr").className = "ptr"; }
+    y0 = null; dy = 0;
+  });
+})();
+
+/* --- Lugares frecuentes: tiempo desde casa ahora mismo (TomTom) y ruta en Waze --- */
+function frecuentes() {
+  var box = $("fqs"); if (!box) return;
+  var vistos = {}, L = (P.r || []).filter(function (r) { if (vistos[r.n]) return false; vistos[r.n] = 1; return true; }).slice(0, 3);
+  if (!L.length) { box.innerHTML = ""; return; }
+  var hp = (P.h || "").split(",");
+  function waze(r) { return "https://www.waze.com/live-map/directions?" + (hp.length === 2 ? "from=ll." + hp[0] + "," + hp[1] + "&" : "") + "to=ll." + r.lat + "," + r.lon; }
+  function tarjeta(r, s) {
+    var cuerpo = '<div class="fm muted">--</div><div class="ft muted">' + (P.k && P.h ? "calculando…" : "falta llave o casa") + '</div>';
+    if (s) {
+      var min = Math.round(s.travelTimeInSeconds / 60), libre = s.noTrafficTravelTimeInSeconds || s.travelTimeInSeconds;
+      var ret = Math.max(0, s.travelTimeInSeconds - libre) / libre;
+      var t = ret < .15 ? '<span class="ok">fluido</span>' : ret < .4 ? '<span class="mid">moderado</span>' : '<span class="bad">pesado</span>';
+      cuerpo = '<div class="fm">' + min + '<small> min</small></div><div class="ft">' + t + ' <span class="muted">· ' + (s.lengthInMeters / 1000).toFixed(1) + ' km</span></div>';
+    }
+    return '<a class="fq" href="' + waze(r) + '" target="_blank" rel="noopener"><div class="fn">' + String(r.n).replace(/</g, "&lt;") + '</div>' + cuerpo + '</a>';
+  }
+  box.innerHTML = L.map(function (r) { return tarjeta(r, null); }).join("");
+  if (!P.k || !P.h) return;
+  Promise.all(L.map(function (r) {
+    var u = "https://api.tomtom.com/routing/1/calculateRoute/" + P.h + ":" + r.lat + "," + r.lon + "/json?key=" + encodeURIComponent(P.k) + "&traffic=true&travelMode=car&routeType=fastest";
+    return getJSON(u).then(function (j) { return j.routes[0].summary; }).catch(function () { return null; });
+  })).then(function (S) { box.innerHTML = L.map(function (r, i) { return tarjeta(r, S[i]); }).join(""); });
+}
+
 /* --- Arranque y actualizaciones --- */
-leerCfg();
+leerCfg(); valoresBase();
 $("cityTitle").textContent = "Pronóstico · " + CFG.ciudad;
 tick(); clima(); aire(); mercados(); noticias(); trafico();
 setInterval(tick, 10e3);
+setInterval(solLuna, 60e3); solLuna();
 setInterval(clima, 15 * 60e3);
 setInterval(aire, 30 * 60e3);
 setInterval(mercados, 5 * 60e3);
 setInterval(noticias, 30 * 60e3);
 setInterval(rotar, 12e3);
 setInterval(trafico, 15 * 60e3);
-rutas(); setInterval(rutas, 5 * 60e3);
+casa(); setInterval(casa, 5e3);
+setInterval(geely, 30e3);
+setTimeout(function () { miniFrame(3); geely(); }, 300);
+setInterval(miniVuelta, 60e3);
+setTimeout(frecuentes, 2000); setInterval(frecuentes, 10 * 60e3);
+setTimeout(rutas, 1500); setInterval(rutas, 5 * 60e3);
 setTimeout(function () { location.reload(); }, 6 * 3600e3); // recarga cada 6 h para liberar memoria del iPad
 }
 </script>

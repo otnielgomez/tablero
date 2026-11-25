@@ -1,0 +1,32 @@
+# Aviso al iPhone cuando terminan la lavadora o la secadora Samsung (SmartThings).
+# ANTES DE USAR:
+#  1) Cambia notify.mobile_app_TU_IPHONE por el nombre real de tu iPhone.
+#  2) Revisa que los entity_id coincidan con los tuyos (Ajustes -> Entidades, busca "machine state").
+
+- id: lavadora_termino
+  alias: "Lavandería: terminó la lavadora"
+  mode: single
+  triggers:
+    - trigger: state
+      entity_id: sensor.lavadora_machine_state
+      from: "run"
+      to: "stop"
+  actions:
+    - action: notify.mobile_app_TU_IPHONE
+      data:
+        title: "🧺 La lavadora terminó"
+        message: "Ya puedes pasar la ropa a la secadora."
+
+- id: secadora_termino
+  alias: "Lavandería: terminó la secadora"
+  mode: single
+  triggers:
+    - trigger: state
+      entity_id: sensor.secadora_machine_state
+      from: "run"
+      to: "stop"
+  actions:
+    - action: notify.mobile_app_TU_IPHONE
+      data:
+        title: "♨️ La secadora terminó"
+        message: "Saca la ropa para que no se arrugue."

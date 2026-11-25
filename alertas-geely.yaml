@@ -1,0 +1,141 @@
+# Alertas de la Geely EX5 EM-i para el iPhone.
+# IMPORTANTE: reemplaza  notify.mobile_app_TU_IPHONE  por el nombre real de tu iPhone
+# (Herramientas para desarrolladores -> Acciones -> escribe "notify.mobile_app").
+
+- id: geely_sin_seguro
+  alias: "Geely: quedó sin seguro"
+  mode: single
+  triggers:
+    - trigger: state
+      entity_id: lock.porche_ex5_em_i_doors
+      to: "unlocked"
+      for: "00:10:00"
+  conditions:
+    - condition: state
+      entity_id: sensor.porche_ex5_em_i_engine_state
+      state: "Off"
+  actions:
+    - action: notify.mobile_app_TU_IPHONE
+      data:
+        title: "🔓 La Geely está sin seguro"
+        message: "Lleva 10 minutos apagada y sin seguro."
+
+- id: geely_puerta_abierta
+  alias: "Geely: puerta, cajuela o cofre abierto"
+  mode: single
+  triggers:
+    - trigger: state
+      entity_id:
+        - binary_sensor.porche_ex5_em_i_door_driver
+        - binary_sensor.porche_ex5_em_i_door_passenger
+        - binary_sensor.porche_ex5_em_i_door_rear_left
+        - binary_sensor.porche_ex5_em_i_door_rear_right
+        - binary_sensor.porche_ex5_em_i_trunk
+        - binary_sensor.porche_ex5_em_i_hood
+      to: "on"
+      for: "00:05:00"
+  conditions:
+    - condition: state
+      entity_id: sensor.porche_ex5_em_i_engine_state
+      state: "Off"
+  actions:
+    - action: notify.mobile_app_TU_IPHONE
+      data:
+        title: "🚪 Geely abierta"
+        message: "{{ trigger.to_state.name | replace('EX5 EM-i ', '') }} lleva 5 minutos abierta."
+
+- id: geely_ventanas_abiertas
+  alias: "Geely: ventanas abiertas estacionada"
+  mode: single
+  triggers:
+    - trigger: state
+      entity_id: cover.porche_ex5_em_i_all_windows
+      to: "open"
+      for: "00:10:00"
+  conditions:
+    - condition: state
+      entity_id: sensor.porche_ex5_em_i_engine_state
+      state: "Off"
+  actions:
+    - action: notify.mobile_app_TU_IPHONE
+      data:
+        title: "🪟 Ventanas abiertas"
+        message: "La Geely está apagada con ventanas abiertas."
+
+- id: geely_llanta_baja
+  alias: "Geely: llanta baja"
+  mode: single
+  triggers:
+    - trigger: numeric_state
+      entity_id:
+        - sensor.porche_ex5_em_i_tire_pressure_fl
+        - sensor.porche_ex5_em_i_tire_pressure_fr
+        - sensor.porche_ex5_em_i_tire_pressure_rl
+        - sensor.porche_ex5_em_i_tire_pressure_rr
+      below: 34
+      for: "00:10:00"
+  actions:
+    - action: notify.mobile_app_TU_IPHONE
+      data:
+        title: "⚠️ Llanta baja"
+        message: "{{ trigger.to_state.name | replace('EX5 EM-i Tire Pressure ', 'Llanta ') }}: {{ trigger.to_state.state | float | round(0) }} PSI."
+
+- id: geely_bateria_llena
+  alias: "Geely: batería llena"
+  mode: single
+  triggers:
+    - trigger: numeric_state
+      entity_id: sensor.porche_ex5_em_i_battery
+      above: 99
+  conditions:
+    - condition: state
+      entity_id: binary_sensor.porche_ex5_em_i_charger_plug
+      state: "on"
+  actions:
+    - action: notify.mobile_app_TU_IPHONE
+      data:
+        title: "🔋 Batería al 100%"
+        message: "La Geely terminó de cargar, ya puedes desconectarla."
+
+- id: geely_gasolina_baja
+  alias: "Geely: gasolina baja"
+  mode: single
+  triggers:
+    - trigger: numeric_state
+      entity_id: sensor.porche_ex5_em_i_fuel_level_percent
+      below: 15
+  actions:
+    - action: notify.mobile_app_TU_IPHONE
+      data:
+        title: "⛽ Gasolina baja"
+        message: "Queda {{ states('sensor.porche_ex5_em_i_fuel_level_percent') | float | round(0) }}% ({{ states('sensor.porche_ex5_em_i_fuel_range') }} km)."
+
+- id: geely_bateria_12v
+  alias: "Geely: batería de 12 V baja"
+  mode: single
+  triggers:
+    - trigger: numeric_state
+      entity_id: sensor.porche_ex5_em_i_12v_battery
+      below: 60
+      for: "00:30:00"
+  actions:
+    - action: notify.mobile_app_TU_IPHONE
+      data:
+        title: "🔋 Batería de 12 V baja"
+        message: "Está en {{ states('sensor.porche_ex5_em_i_12v_battery') }}%. Conviene manejarla o revisarla."
+
+- id: geely_servicio
+  alias: "Geely: servicio próximo"
+  mode: single
+  triggers:
+    - trigger: numeric_state
+      entity_id: sensor.porche_ex5_em_i_days_to_service
+      below: 15
+    - trigger: numeric_state
+      entity_id: sensor.porche_ex5_em_i_distance_to_service
+      below: 500
+  actions:
+    - action: notify.mobile_app_TU_IPHONE
+      data:
+        title: "🔧 Servicio próximo"
+        message: "Faltan {{ states('sensor.porche_ex5_em_i_days_to_service') }} días o {{ states('sensor.porche_ex5_em_i_distance_to_service') }} km para el servicio."

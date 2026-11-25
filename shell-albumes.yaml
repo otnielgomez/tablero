@@ -1,0 +1,5 @@
+# Comandos para que el tablero agregue, quite y actualice álbumes del protector.
+# Se agregan a configuration.yaml con:  shell_command: !include shell-albumes.yaml
+album_agregar: 'python3 /data/data/com.termux/files/home/fotos-album.py --agregar "{{ nombre }}" "{{ url }}"'
+album_quitar: 'python3 /data/data/com.termux/files/home/fotos-album.py --quitar "{{ nombre }}"'
+album_actualizar: 'python3 /data/data/com.termux/files/home/fotos-album.py'
