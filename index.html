@@ -773,11 +773,12 @@ function abrirCfg() {
   $("cfg").style.display = "block";
 }
 (function () {
-  var t = null, el = $("clock");
-  function start() { t = setTimeout(abrirCfg, 2500); }
-  function stop() { clearTimeout(t); }
-  el.addEventListener("touchstart", start); el.addEventListener("touchend", stop); el.addEventListener("touchmove", stop);
-  el.addEventListener("mousedown", start); el.addEventListener("mouseup", stop);
+  var toques = [], el = $("clock");                  // 5 toques en el reloj (en menos de 3 s) abren Ajustes
+  el.addEventListener("click", function () {
+    var ahora = Date.now();
+    toques = toques.filter(function (x) { return ahora - x < 3000; }); toques.push(ahora);
+    if (toques.length >= 5) { toques = []; abrirCfg(); }
+  });
   $("cClose").addEventListener("click", function () { $("cfg").style.display = "none"; });
   $("cGeo").addEventListener("click", function () {
     if (!navigator.geolocation) { $("cMsg").textContent = "Este navegador no permite ubicación."; return; }
@@ -819,7 +820,7 @@ function rutas(forzar) {
   var box = $("trips"), ahora = new Date();
   var activas = (P.r || []).map(function (r) { return { r: r, obj: rutaHoy(r, ahora, !!probando) }; }).filter(function (x) { return x.obj; });
   if (!activas.length) { box.innerHTML = ""; return; }
-  if (!P.k || !P.h) { box.innerHTML = '<div class="trip" style="display:block"><span class="err">Falta la llave de TomTom o la ubicación de casa. Mantén presionado el reloj para abrir Ajustes.</span></div>'; return; }
+  if (!P.k || !P.h) { box.innerHTML = '<div class="trip" style="display:block"><span class="err">Falta la llave de TomTom o la ubicación de casa. Toca 5 veces el reloj para abrir Ajustes.</span></div>'; return; }
   Promise.all(activas.map(function (x) {
     var r = x.r, u = "https://api.tomtom.com/routing/1/calculateRoute/" + P.h + ":" + r.lat + "," + r.lon +
       "/json?key=" + encodeURIComponent(P.k) + "&traffic=true&travelMode=car&routeType=fastest&computeTravelTimeFor=all";
