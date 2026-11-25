@@ -1,0 +1,32 @@
+# Bienvenida por voz en la bocina Klipsch cuando alguien llega a casa.
+# Requiere la integración "Google Translate text-to-speech" (idioma es, región com.mx).
+# Ajusta media_player.klipsch si tu bocina tiene otro nombre (Ajustes -> Entidades).
+
+- id: bienvenida_casa
+  alias: "Casa: bienvenida al llegar"
+  mode: queued
+  triggers:
+    - trigger: state
+      entity_id: person.otniel        # agrega aquí a tu esposa: person.xxx
+      to: "home"
+  conditions:
+    - condition: template            # que sí haya salido (no un salto de GPS) por más de 10 min
+      value_template: >
+        {{ trigger.from_state.state not in ['home','unknown','unavailable']
+           and (now() - trigger.from_state.last_changed).total_seconds() > 600 }}
+    - condition: time                # no despertar a nadie
+      after: "07:00:00"
+      before: "22:30:00"
+  actions:
+    - delay: "00:00:20"              # da tiempo de abrir la puerta
+    - action: tts.speak
+      target:
+        entity_id: tts.google_translate_es_com_mx
+      data:
+        media_player_entity_id: media_player.klipsch
+        message: >
+          {% set h = now().hour %}
+          {{ 'Buenos días' if h < 12 else 'Buenas tardes' if h < 19 else 'Buenas noches' }},
+          {{ trigger.to_state.name }}. Bienvenido a casa.
+          {% set t = state_attr('weather.forecast_casa','temperature') %}
+          {% if t is not none %}Afuera hay {{ t | round(0) | int }} grados.{% endif %}

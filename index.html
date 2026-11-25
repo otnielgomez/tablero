@@ -281,6 +281,17 @@ h2{font:600 12px "Red Hat Text",sans-serif;color:var(--acc);letter-spacing:.02em
 .login button{font:700 20px "Red Hat Text",sans-serif;color:#07102b;background:var(--acc);border:0;border-radius:16px;padding:0 30px;min-height:64px}
 .login button:focus{outline:4px solid #fff}
 .login .sec2{background:#22345f;color:var(--ink);font-size:16px;min-height:48px}
+/* Bienvenida */
+.wel{position:fixed;top:0;left:0;right:0;bottom:0;z-index:19;display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;padding:40px;
+  background:radial-gradient(120% 90% at 50% 0%,#1a3fd0 0%,rgba(26,63,208,0) 60%),#07102b}
+.wel h1{font:800 64px "Red Hat Display",sans-serif;line-height:1.05;animation:welIn .7s ease-out}
+.wel .sub{font-size:22px;color:#b9c8ea}
+.wel .its{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:900px}
+.wel .its span{font:600 18px "Red Hat Text",sans-serif;background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:16px;padding:10px 16px}
+.wel .its span.urg{background:rgba(160,30,40,.6)}
+.wel small{color:var(--dim)}
+@keyframes welIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.wel h1{animation:none}}
 /* Casa (Home Assistant) */
 .withroom .hours{flex:none;height:70px;min-height:0;margin-bottom:6px}
 .withroom .dev{min-height:54px;padding:7px 10px}
@@ -478,6 +489,7 @@ h2{font:600 12px "Red Hat Text",sans-serif;color:var(--acc);letter-spacing:.02em
 </div>
 <div class="ss" id="ss"><img id="ssA" alt=""><img id="ssB" alt=""><div class="ssi"><div class="h" id="ssH"></div><div class="d" id="ssD"></div></div><div class="ssb" id="ssB2"></div><div class="ssm" id="ssM"></div></div>
 <div class="login" id="login"><h3>Conectar con Home Assistant</h3><p>Inicia sesión una vez con tu usuario de Home Assistant (administrador). El tablero recordará la sesión y tomará la configuración guardada.</p><button type="button" id="loginBtn">Iniciar sesión</button><button type="button" class="sec2" id="loginLater">Ahora no</button><p class="err" id="loginErr"></p></div>
+<div class="wel" id="wel"><h1 id="welT"></h1><div class="sub" id="welS"></div><div class="its" id="welI"></div><small>Toca para continuar</small></div>
 <div class="ptr" id="ptr">↓ Desliza para recargar</div>
 <div class="lav" id="lav"></div>
 <div class="dim" id="dim"></div>
@@ -1905,6 +1917,40 @@ setTimeout(lavadoras, 3000); setInterval(lavadoras, 30e3);
     y0 = null; dy = 0;
   });
 })();
+
+/* --- Bienvenida: cuando una persona pasa de fuera a "En casa" --- */
+var WEL = { prev: null, t: null };
+var WTPL = "{{ states.person | map(attribute='entity_id') | map('states') | list | to_json }}|{{ states.person | map(attribute='name') | list | to_json }}";
+function saludo() { var h = new Date().getHours(); return h < 12 ? "Buenos días" : h < 19 ? "Buenas tardes" : "Buenas noches"; }
+function bienvenida(nombres) {
+  despertar(); if (window.PUERTA && PUERTA.abierta) return;
+  var n = nombres.length === 1 ? nombres[0] : nombres.slice(0, -1).join(", ") + " y " + nombres[nombres.length - 1];
+  $("welT").textContent = "¡Bienvenido" + (nombres.length > 1 ? "s" : "") + ", " + n + "!";
+  var temp = $("nowTemp").textContent.replace(/°C|\s/g, "");
+  $("welS").textContent = saludo() + (temp && temp !== "--" ? " · " + temp + "°C afuera" : "");
+  var it = [];
+  if (typeof banda === "function") banda();
+  (BANDA.lav || []).forEach(function (x) { it.push(x); });
+  var nx = $("nxt").textContent.trim(); if (nx) it.push({ t: "📅 " + nx });
+  (BANDA.pend || []).forEach(function (x) { it.push(x); });
+  var ch = $("mStat") ? Array.prototype.map.call($("mStat").children, function (c) { return c.textContent.trim(); }).join(" · ") : ""; if (ch) it.push({ t: "🚙 Geely " + ch });
+  $("welI").innerHTML = it.slice(0, 6).map(function (x) { return '<span' + (x.u ? ' class="urg"' : "") + '>' + esc(x.t) + '</span>'; }).join("");
+  $("wel").style.display = "flex";
+  clearTimeout(WEL.t); WEL.t = setTimeout(function () { $("wel").style.display = "none"; }, 25e3);
+}
+$("wel").addEventListener("click", function () { clearTimeout(WEL.t); this.style.display = "none"; });
+function revisarLlegadas() {
+  if (!P.t || !haBase()) return;
+  ha("/api/template", { template: WTPL }).then(function (t) {
+    var pr = String(t).split("|"), S = JSON.parse(pr[0]), N = JSON.parse(pr[1]);
+    if (WEL.prev) {
+      var llegan = N.filter(function (n, i) { return S[i] === "home" && WEL.prev[n] && WEL.prev[n] !== "home" && WEL.prev[n] !== "unknown" && WEL.prev[n] !== "unavailable"; });
+      if (llegan.length) bienvenida(llegan);
+    }
+    WEL.prev = {}; N.forEach(function (n, i) { WEL.prev[n] = S[i]; });
+  }).catch(function () {});
+}
+setTimeout(revisarLlegadas, 4000); setInterval(revisarLlegadas, 15e3);
 
 /* --- Lugares frecuentes: tiempo desde casa ahora mismo (TomTom) y ruta en Waze --- */
 function frecuentes() {
